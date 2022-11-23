@@ -52,7 +52,11 @@ export default function Produtos({ produtos }) {
           </tbody>
         </table>
       </div>
-      {abrirModal && <NovoProduto />}
+      {abrirModal && (
+        <>
+          <NovoProduto /> <button onClick={() => setAbrirModal(!abrirModal)} className='fixed z-50 top-10 right-10'>X</button>
+        </>
+      )}
     </div>
   );
 }
