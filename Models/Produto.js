@@ -6,7 +6,7 @@ const ProdutoSchema = new mongoose.Schema(
     descricao: { type: String, required: true },
     valorCusto: { type: String, required: true },
     valorVenda: { type: String, required: true },
-    criadoEm: { type: String },
+    criadoEm: { type: Date  },
   },
   {
     timestamps: true,

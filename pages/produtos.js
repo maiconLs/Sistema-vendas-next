@@ -37,7 +37,7 @@ export default function Produtos({ produtos }) {
           </thead>
           <tbody className='bg-slate-50'>
             {produtos.map((produto) => (
-              <tr>
+              <tr key={produto._id}>
                 <td className='p-5 w-1/5  text-center'>{produto.produto}</td>
                 <td className='p-5 w-1/5  text-center'>
                   R$ {produto.valorCusto}

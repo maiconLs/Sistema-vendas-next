@@ -1,27 +1,47 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from 'next/router'
 
 export default function NovoProduto() {
   const [novoProduto, setNovoProduto] = useState();
+
+  const router = useRouter()
+  const { redirect } = router.query
 
   function handleChange(e) {
     setNovoProduto({ ...novoProduto, [e.target.name]: e.target.value });
     console.log(novoProduto);
   }
 
- async function handleSubmit(e){
-    e.preventDefault()
+  useEffect(() => {
+    const data = new Date();
 
-    await axios.post('/api/criarProduto', novoProduto)
-    .then((response) => {
-        setNovoProduto('')
-        console.log(response.data)
-    })
+    const criadoEm = `${data.getDate()}/${
+      data.getMonth() + 1
+    }/${data.getFullYear()}`;
+
+    setNovoProduto({ ...novoProduto, criadoEm });
+  }, []);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    await axios
+      .post("/api/criarProduto", novoProduto)
+      .then((response) => {
+        setNovoProduto();
+        router.push('/produtos')
+        console.log(response.data);
+      })
+      .catch((error) => console.log(error.response.data.message));
   }
   return (
     <div className='w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-50'>
       <div className='w-5/12  bg-white rounded '>
-        <form onSubmit={handleSubmit} className='flex flex-col justify-center items-center m-7'>
+        <form
+          onSubmit={handleSubmit}
+          className='flex flex-col justify-center items-center m-7'
+        >
           <h2 className='font-bold text-2xl text-slate-700 p-3 '>
             Cadastrar novo produto
           </h2>
