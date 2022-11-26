@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Head from "next/head";
+import axios from "axios";
+
 import Nav from "../components/nav";
 import Header from "../components/header";
 import db from "../utils/db";
@@ -10,7 +12,8 @@ import EditarProduto from "../components/editarProduto";
 export default function Produtos({ produtos }) {
   const [abrirModal, setAbrirModal] = useState(false);
   const [abrirEditar, setAbrirEditar] = useState(false);
-  const [idProduto, setIdProduto] = useState('');
+  const [abrirExcluir, setAbrirExcluir] = useState(false);
+  const [idProduto, setIdProduto] = useState("");
   const [busca, setBusca] = useState("");
   const [produtoFiltrado, setProdutoFiltrado] = useState();
 
@@ -19,9 +22,20 @@ export default function Produtos({ produtos }) {
     setProdutoFiltrado(buscando);
   }
 
-  function Editar(id){
-    setIdProduto(id)
-    setAbrirEditar(true)
+  function Editar(id) {
+    setIdProduto(id);
+    setAbrirEditar(true);
+  }
+
+  function ModalExcluir(id) {
+    setIdProduto(id);
+    setAbrirExcluir(true);
+  }
+
+  async function Excluir() {
+    await axios
+      .delete(`/api/excluirProduto/${idProduto}`)
+      .then((response) => console.log(idProduto));
   }
   return (
     <div>
@@ -89,7 +103,9 @@ export default function Produtos({ produtos }) {
                       {produto.criadoEm}
                     </td>
                     <td className='p-5 w-1/5  text-center'>
-                    <button onClick={() => Editar(produto._id)}>Editar</button>
+                      <button onClick={() => Editar(produto._id)}>
+                        Editar
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -108,13 +124,30 @@ export default function Produtos({ produtos }) {
                       {produto.criadoEm}
                     </td>
                     <td className='p-5 w-1/5  text-center'>
-                      <button onClick={() => Editar(produto._id)}>Editar</button>
+                      <button onClick={() => Editar(produto._id)}>
+                        Editar
+                      </button>
+                      <button onClick={() => ModalExcluir(produto._id)}>
+                        Excluir
+                      </button>
                     </td>
                   </tr>
                 ))}
           </tbody>
         </table>
       </div>
+      {abrirExcluir && (
+        <div className='fixed z-50 w-full min-h-screen flex justify-center items-center inset-0'>
+          <div className='w-1/4 h-44 rounded bg-white flex flex-col justify-around items-center shadow-xl  '>
+            <h1>Deseja excluir este produto?</h1>
+            <div className="w-full flex flex-row justify-around items-center">
+              
+              <button onClick={() => Excluir()}>Excluir</button>
+              <button onClick={() => setAbrirExcluir(false)}>Cancelar</button>
+            </div>
+          </div>
+        </div>
+      )}
       {abrirModal && (
         <>
           <NovoProduto />{" "}
@@ -129,7 +162,7 @@ export default function Produtos({ produtos }) {
 
       {abrirEditar && (
         <>
-          <EditarProduto id={idProduto}/>{" "}
+          <EditarProduto id={idProduto} />{" "}
           <button
             onClick={() => setAbrirEditar(!abrirEditar)}
             className='fixed z-50 top-10 right-10'

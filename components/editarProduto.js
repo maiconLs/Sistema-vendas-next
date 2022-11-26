@@ -18,7 +18,6 @@ export default function EditarProduto({ id }) {
 
   function handleChange(e) {
     setNovoProduto({ ...novoProduto, [e.target.name]: e.target.value });
-    console.log(novoProduto);
   }
 
   async function handleSubmit(e) {
@@ -31,7 +30,7 @@ export default function EditarProduto({ id }) {
         // router.push("/produtos");
         console.log(response.data);
       })
-      .catch((error) => console.log('erro'));
+      .catch((error) => console.log(error));
   }
 
   return (

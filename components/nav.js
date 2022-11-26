@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Nav() {
   return (
-    <div className='fixed overflow-auto z-40 w-48 min-h-screen bg-slate-500 '>
+    <div className='fixed overflow-auto z-30 w-48 min-h-screen bg-slate-500 '>
       <ul className='w-full'>
         <Link href='/'>
           {" "}

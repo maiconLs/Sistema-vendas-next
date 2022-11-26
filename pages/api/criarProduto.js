@@ -30,7 +30,7 @@ export default async function criarProduto(req, res) {
     criadoEm,
   });
 
-  const novoproduto = await novoProduto.save();
+  await novoProduto.save();
   await db.disconnect();
   res.status(201).json({
     produto,

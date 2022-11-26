@@ -6,7 +6,6 @@ export default function NovoProduto() {
   const [novoProduto, setNovoProduto] = useState();
 
   const router = useRouter()
-  const { redirect } = router.query
 
   function handleChange(e) {
     setNovoProduto({ ...novoProduto, [e.target.name]: e.target.value });
@@ -27,16 +26,15 @@ export default function NovoProduto() {
     e.preventDefault();
 
     await axios
-      .post("/api/criarProduto", novoProduto)
+      .post("/api/criarProduto/", novoProduto)
       .then((response) => {
-        setNovoProduto();
         router.push('/produtos')
         console.log(response.data);
       })
       .catch((error) => console.log(error.response.data.message));
   }
   return (
-    <div className='w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-50'>
+    <div className='w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-40'>
       <div className='w-5/12  bg-white rounded '>
         <form
           onSubmit={handleSubmit}
