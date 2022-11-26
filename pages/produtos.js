@@ -5,19 +5,24 @@ import Header from "../components/header";
 import db from "../utils/db";
 import Produto from "../Models/Produto";
 import NovoProduto from "../components/novoProduto";
+import EditarProduto from "../components/editarProduto";
 
 export default function Produtos({ produtos }) {
   const [abrirModal, setAbrirModal] = useState(false);
+  const [abrirEditar, setAbrirEditar] = useState(false);
+  const [idProduto, setIdProduto] = useState('');
   const [busca, setBusca] = useState("");
   const [produtoFiltrado, setProdutoFiltrado] = useState();
 
-  function buscarProduto() {
-    const buscando = produtos.filter((produto) =>
-      produto.produto.includes(busca)
-    );
+  function buscarProduto(e) {
+    const buscando = produtos.filter((produto) => produto.produto.includes(e));
     setProdutoFiltrado(buscando);
   }
 
+  function Editar(id){
+    setIdProduto(id)
+    setAbrirEditar(true)
+  }
   return (
     <div>
       <Nav />
@@ -38,15 +43,19 @@ export default function Produtos({ produtos }) {
               type='text'
               onChange={(e) => setBusca(e.target.value)}
             />
-            <button onClick={buscarProduto}>Buscar</button>
+            <button onClick={() => buscarProduto(busca)}>Buscar</button>
             <div>
-              {
-              busca &&
-              produtos
-                .filter((produto) => produto.produto.includes(busca))
-                .map((produto) => (
-                  <li>{produto.produto}</li>
-                ))}
+              {busca &&
+                produtos
+                  .filter((produto) => produto.produto.includes(busca))
+                  .map((produto) => (
+                    <li
+                      key={produto._id}
+                      onClick={(e) => buscarProduto(e.target.innerHTML)}
+                    >
+                      {produto.produto}
+                    </li>
+                  ))}
             </div>
           </div>
         }
@@ -79,7 +88,9 @@ export default function Produtos({ produtos }) {
                     <td className='p-5 w-1/5  text-center'>
                       {produto.criadoEm}
                     </td>
-                    <td className='p-5 w-1/5  text-center'></td>
+                    <td className='p-5 w-1/5  text-center'>
+                    <button onClick={() => Editar(produto._id)}>Editar</button>
+                    </td>
                   </tr>
                 ))
               : produtos.map((produto) => (
@@ -96,7 +107,9 @@ export default function Produtos({ produtos }) {
                     <td className='p-5 w-1/5  text-center'>
                       {produto.criadoEm}
                     </td>
-                    <td className='p-5 w-1/5  text-center'></td>
+                    <td className='p-5 w-1/5  text-center'>
+                      <button onClick={() => Editar(produto._id)}>Editar</button>
+                    </td>
                   </tr>
                 ))}
           </tbody>
@@ -110,6 +123,18 @@ export default function Produtos({ produtos }) {
             className='fixed z-50 top-10 right-10'
           >
             X
+          </button>
+        </>
+      )}
+
+      {abrirEditar && (
+        <>
+          <EditarProduto id={idProduto}/>{" "}
+          <button
+            onClick={() => setAbrirEditar(!abrirEditar)}
+            className='fixed z-50 top-10 right-10'
+          >
+            fechar
           </button>
         </>
       )}
