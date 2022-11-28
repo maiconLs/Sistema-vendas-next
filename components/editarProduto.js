@@ -1,16 +1,22 @@
 import axios from "axios";
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from "react";
 
-export default function EditarProduto({ id }) {
+export default function EditarProduto({ id, display }) {
   const [novoProduto, setNovoProduto] = useState();
   const [produto, setProduto] = useState();
 
+  const router = useRouter()
+
   useEffect(() => {
     const data = async () => {
-      await axios.get(`/api/buscarProduto/${id}`).then((res) => {
+      if(display=='block'){
+           await axios.get(`/api/buscarProduto/${id}`).then((res) => {
         setProduto(res.data.produto);
         setNovoProduto(res.data.produto);
       });
+      }
+   
     };
 
     data();
@@ -26,15 +32,14 @@ export default function EditarProduto({ id }) {
     await axios
       .put("/api/editarProduto", novoProduto)
       .then((response) => {
-        setNovoProduto();
-        // router.push("/produtos");
-        console.log(response.data);
+        setProduto('');
+        router.push("/produtos");
       })
       .catch((error) => console.log(error));
   }
 
   return (
-    <div className='w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-50'>
+    <div className={`${display} w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-50` }>
       <div className='w-5/12  bg-white rounded '>
         <form
           onSubmit={handleSubmit}

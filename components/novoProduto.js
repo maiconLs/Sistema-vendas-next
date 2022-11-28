@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
-export default function NovoProduto() {
+export default function NovoProduto({display}) {
   const [novoProduto, setNovoProduto] = useState();
 
-  const router = useRouter()
+  const router = useRouter();
 
   function handleChange(e) {
     setNovoProduto({ ...novoProduto, [e.target.name]: e.target.value });
@@ -28,13 +30,13 @@ export default function NovoProduto() {
     await axios
       .post("/api/criarProduto/", novoProduto)
       .then((response) => {
-        router.push('/produtos')
-        console.log(response.data);
+        router.push("/produtos");
+        toast.success("Produto criado com sucesso!");
       })
-      .catch((error) => console.log(error.response.data.message));
+      .catch((error) => toast.error(error.response.data.message));
   }
   return (
-    <div className='w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-40'>
+    <div className={`${display} w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-40`}>
       <div className='w-5/12  bg-white rounded '>
         <form
           onSubmit={handleSubmit}

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import axios from "axios";
+import { useRouter } from 'next/router'
 
 import Nav from "../components/nav";
 import Header from "../components/header";
@@ -9,22 +10,31 @@ import Produto from "../Models/Produto";
 import NovoProduto from "../components/novoProduto";
 import EditarProduto from "../components/editarProduto";
 
+import { RiDeleteBin2Line } from "react-icons/ri";
+import { BiEditAlt } from "react-icons/bi";
+import { AiOutlineClose } from "react-icons/ai";
+import { toast } from 'react-toastify'
+
 export default function Produtos({ produtos }) {
-  const [abrirModal, setAbrirModal] = useState(false);
-  const [abrirEditar, setAbrirEditar] = useState(false);
+  const [abrirModal, setAbrirModal] = useState('hidden');
+  const [abrirEditar, setAbrirEditar] = useState('hidden');
   const [abrirExcluir, setAbrirExcluir] = useState(false);
   const [idProduto, setIdProduto] = useState("");
   const [busca, setBusca] = useState("");
   const [produtoFiltrado, setProdutoFiltrado] = useState();
 
-  function buscarProduto(e) {
-    const buscando = produtos.filter((produto) => produto.produto.includes(e));
+  const router = useRouter()
+
+  useEffect(() => {
+    const buscando = produtos.filter((produto) =>
+      produto.produto.toLowerCase().includes(busca.toLowerCase())
+    );
     setProdutoFiltrado(buscando);
-  }
+  }, [busca, produtos]);
 
   function Editar(id) {
     setIdProduto(id);
-    setAbrirEditar(true);
+    setAbrirEditar('block');
   }
 
   function ModalExcluir(id) {
@@ -35,7 +45,11 @@ export default function Produtos({ produtos }) {
   async function Excluir() {
     await axios
       .delete(`/api/excluirProduto/${idProduto}`)
-      .then((response) => console.log(idProduto));
+      .then((response) => {
+        router.push('/produtos')
+        toast.success('Produto excluido com sucesso!')
+        setAbrirExcluir(false)
+      });
   }
   return (
     <div>
@@ -44,7 +58,7 @@ export default function Produtos({ produtos }) {
         title='Produtos'
         button={
           <button
-            onClick={() => setAbrirModal(!abrirModal)}
+            onClick={() => setAbrirModal('block')}
             className='w-56 bg-lime-400 rounded h-10 text-white font-bold'
           >
             Novo Produto
@@ -56,21 +70,8 @@ export default function Produtos({ produtos }) {
               className='rounded border p-2 w-56 outline-none ring-indigo-300  focus:ring'
               type='text'
               onChange={(e) => setBusca(e.target.value)}
+              placeholder='Buscar produto..'
             />
-            <button onClick={() => buscarProduto(busca)}>Buscar</button>
-            <div>
-              {busca &&
-                produtos
-                  .filter((produto) => produto.produto.includes(busca))
-                  .map((produto) => (
-                    <li
-                      key={produto._id}
-                      onClick={(e) => buscarProduto(e.target.innerHTML)}
-                    >
-                      {produto.produto}
-                    </li>
-                  ))}
-            </div>
           </div>
         }
       />
@@ -103,8 +104,14 @@ export default function Produtos({ produtos }) {
                       {produto.criadoEm}
                     </td>
                     <td className='p-5 w-1/5  text-center'>
-                      <button onClick={() => Editar(produto._id)}>
-                        Editar
+                      <button
+                        className='mr-5'
+                        onClick={() => Editar(produto._id)}
+                      >
+                        <BiEditAlt className='fill-slate-800' size={25} />
+                      </button>
+                      <button onClick={() => ModalExcluir(produto._id)}>
+                        <RiDeleteBin2Line className='fill-red-900' size={25} />
                       </button>
                     </td>
                   </tr>
@@ -124,11 +131,14 @@ export default function Produtos({ produtos }) {
                       {produto.criadoEm}
                     </td>
                     <td className='p-5 w-1/5  text-center'>
-                      <button onClick={() => Editar(produto._id)}>
-                        Editar
+                      <button
+                        className='mr-5'
+                        onClick={() => Editar(produto._id)}
+                      >
+                        <BiEditAlt className='fill-slate-800' size={25} />
                       </button>
                       <button onClick={() => ModalExcluir(produto._id)}>
-                        Excluir
+                        <RiDeleteBin2Line className='fill-red-900' size={25} />
                       </button>
                     </td>
                   </tr>
@@ -137,47 +147,56 @@ export default function Produtos({ produtos }) {
         </table>
       </div>
       {abrirExcluir && (
-        <div className='fixed z-50 w-full min-h-screen flex justify-center items-center inset-0'>
-          <div className='w-1/4 h-44 rounded bg-white flex flex-col justify-around items-center shadow-xl  '>
-            <h1>Deseja excluir este produto?</h1>
-            <div className="w-full flex flex-row justify-around items-center">
-              
-              <button onClick={() => Excluir()}>Excluir</button>
-              <button onClick={() => setAbrirExcluir(false)}>Cancelar</button>
+        <div className=' fixed z-50 w-full min-h-screen flex justify-center items-center inset-0'>
+          <div className='w-2/6 h-52 rounded-md bg-white flex flex-col justify-around items-center shadow-xl  '>
+            <h1 className='font-bold text-xl'>Deseja excluir este produto?</h1>
+            <div className='w-full flex flex-row justify-around items-center'>
+              <button
+                className=' font-bold border-2 px-4 py-1 rounded-md bg-slate-400'
+                onClick={() => Excluir()}
+              >
+                Excluir
+              </button>
+              <button
+                className='font-bold border-2 px-4 py-1 rounded-md bg-gray-200'
+                onClick={() => setAbrirExcluir(false)}
+              >
+                Cancelar
+              </button>
             </div>
           </div>
         </div>
       )}
-      {abrirModal && (
+      
         <>
-          <NovoProduto />{" "}
+          <NovoProduto display={abrirModal}/>{" "}
           <button
-            onClick={() => setAbrirModal(!abrirModal)}
-            className='fixed z-50 top-10 right-10'
+            onClick={() => setAbrirModal('hidden')}
+            className={`${abrirModal} fixed z-50 top-10 right-10`}
           >
-            X
+            <AiOutlineClose size={40} />
           </button>
         </>
-      )}
+      
 
-      {abrirEditar && (
+    
         <>
-          <EditarProduto id={idProduto} />{" "}
+          <EditarProduto id={idProduto} display={abrirEditar} />{" "}
           <button
-            onClick={() => setAbrirEditar(!abrirEditar)}
-            className='fixed z-50 top-10 right-10'
+            onClick={() => setAbrirEditar('hidden')}
+            className={`${abrirEditar} fixed z-50 top-10 right-10`}
           >
-            fechar
+            <AiOutlineClose size={40} />
           </button>
         </>
-      )}
+     
     </div>
   );
 }
 
 export async function getServerSideProps() {
   await db.connect();
-  const produtos = await Produto.find().lean();
+  const produtos = await Produto.find().sort({ createdAt: -1 }).lean();
   console.log(produtos);
   return {
     props: {

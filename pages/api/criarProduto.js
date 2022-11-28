@@ -10,7 +10,7 @@ export default async function criarProduto(req, res) {
 
   if (!produto || !descricao || !valorCusto || !valorVenda) {
     res.status(422).json({
-      message: "Validation error",
+      message: "Preencha todos os campos!",
     });
     return;
   }
