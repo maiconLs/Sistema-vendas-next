@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
-export default function NovoProduto({display}) {
+export default function NovoProduto({click}) {
   const [novoProduto, setNovoProduto] = useState();
 
   const router = useRouter();
@@ -30,13 +30,14 @@ export default function NovoProduto({display}) {
     await axios
       .post("/api/criarProduto/", novoProduto)
       .then((response) => {
-        router.push("/produtos");
+        router.push('/produtos')
+        click()
         toast.success("Produto criado com sucesso!");
       })
       .catch((error) => toast.error(error.response.data.message));
   }
   return (
-    <div className={`${display} w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-40`}>
+    <div className=' w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-40'>
       <div className='w-5/12  bg-white rounded '>
         <form
           onSubmit={handleSubmit}
@@ -62,16 +63,18 @@ export default function NovoProduto({display}) {
           />
           <input
             className='rounded border p-2 w-72 outline-none ring-indigo-300 m-4 focus:ring'
-            type='text'
+            type='number'
             placeholder='Valor de custo'
             name='valorCusto'
+            step="any"
             onChange={handleChange}
           />
           <input
             className='rounded border p-2 w-72 outline-none ring-indigo-300 m-4 focus:ring'
-            type='text'
+            type='number'
             placeholder='Valor de venda'
             name='valorVenda'
+            step="any"
             onChange={handleChange}
           />
 

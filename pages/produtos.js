@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import axios from "axios";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
 import Nav from "../components/nav";
 import Header from "../components/header";
@@ -13,28 +13,30 @@ import EditarProduto from "../components/editarProduto";
 import { RiDeleteBin2Line } from "react-icons/ri";
 import { BiEditAlt } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
-import { toast } from 'react-toastify'
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 export default function Produtos({ produtos }) {
-  const [abrirModal, setAbrirModal] = useState('hidden');
-  const [abrirEditar, setAbrirEditar] = useState('hidden');
+  const [abrirModal, setAbrirModal] = useState(false);
+  const [abrirEditar, setAbrirEditar] = useState(false);
   const [abrirExcluir, setAbrirExcluir] = useState(false);
   const [idProduto, setIdProduto] = useState("");
   const [busca, setBusca] = useState("");
   const [produtoFiltrado, setProdutoFiltrado] = useState();
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const buscando = produtos.filter((produto) =>
       produto.produto.toLowerCase().includes(busca.toLowerCase())
     );
     setProdutoFiltrado(buscando);
-  }, [busca, produtos]);
+    console.log(produtos)
+  }, [busca, produtos, abrirExcluir]);
 
   function Editar(id) {
     setIdProduto(id);
-    setAbrirEditar('block');
+    setAbrirEditar(true);
   }
 
   function ModalExcluir(id) {
@@ -43,13 +45,11 @@ export default function Produtos({ produtos }) {
   }
 
   async function Excluir() {
-    await axios
-      .delete(`/api/excluirProduto/${idProduto}`)
-      .then((response) => {
-        router.push('/produtos')
-        toast.success('Produto excluido com sucesso!')
-        setAbrirExcluir(false)
-      });
+    await axios.delete(`/api/excluirProduto/${idProduto}`).then((response) => {
+      router.push("/produtos");
+      toast.success("Produto excluido com sucesso!");
+      setAbrirExcluir(false);
+    });
   }
   return (
     <div>
@@ -58,7 +58,7 @@ export default function Produtos({ produtos }) {
         title='Produtos'
         button={
           <button
-            onClick={() => setAbrirModal('block')}
+            onClick={() => setAbrirModal(!abrirModal)}
             className='w-56 bg-lime-400 rounded h-10 text-white font-bold'
           >
             Novo Produto
@@ -77,6 +77,8 @@ export default function Produtos({ produtos }) {
       />
 
       <div className='pl-48 mt-5 '>
+        {
+          produtos.length !== 0 ?
         <table className='w-full '>
           <thead className='bg-slate-100'>
             <tr>
@@ -144,10 +146,12 @@ export default function Produtos({ produtos }) {
                   </tr>
                 ))}
           </tbody>
-        </table>
+        </table>  :
+        <h1 className="font-bold p-5 text-xl">Não há produtos cadastrados!</h1>
+        } 
       </div>
       {abrirExcluir && (
-        <div className=' fixed z-50 w-full min-h-screen flex justify-center items-center inset-0'>
+        <div className='fixed z-50 w-full min-h-screen flex justify-center items-center inset-0'>
           <div className='w-2/6 h-52 rounded-md bg-white flex flex-col justify-around items-center shadow-xl  '>
             <h1 className='font-bold text-xl'>Deseja excluir este produto?</h1>
             <div className='w-full flex flex-row justify-around items-center'>
@@ -167,29 +171,29 @@ export default function Produtos({ produtos }) {
           </div>
         </div>
       )}
-      
+      {abrirModal && (
         <>
-          <NovoProduto display={abrirModal}/>{" "}
+          <NovoProduto click={() => setAbrirModal(false)} />
           <button
-            onClick={() => setAbrirModal('hidden')}
-            className={`${abrirModal} fixed z-50 top-10 right-10`}
+            onClick={() => setAbrirModal(!abrirModal)}
+            className='fixed z-50 top-10 right-10'
           >
             <AiOutlineClose size={40} />
           </button>
         </>
-      
+      )}
 
-    
+      {abrirEditar && (
         <>
-          <EditarProduto id={idProduto} display={abrirEditar} />{" "}
+          <EditarProduto id={idProduto} click={() => setAbrirEditar(false)} />{" "}
           <button
-            onClick={() => setAbrirEditar('hidden')}
-            className={`${abrirEditar} fixed z-50 top-10 right-10`}
+            onClick={() => setAbrirEditar(!abrirEditar)}
+            className='fixed z-50 top-10 right-10'
           >
             <AiOutlineClose size={40} />
           </button>
         </>
-     
+      )}
     </div>
   );
 }

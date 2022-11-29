@@ -1,22 +1,21 @@
 import axios from "axios";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
-export default function EditarProduto({ id, display }) {
+export default function EditarProduto({ id, click }) {
   const [novoProduto, setNovoProduto] = useState();
   const [produto, setProduto] = useState();
 
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const data = async () => {
-      if(display=='block'){
-           await axios.get(`/api/buscarProduto/${id}`).then((res) => {
+      await axios.get(`/api/buscarProduto/${id}`).then((res) => {
         setProduto(res.data.produto);
         setNovoProduto(res.data.produto);
       });
-      }
-   
     };
 
     data();
@@ -32,14 +31,15 @@ export default function EditarProduto({ id, display }) {
     await axios
       .put("/api/editarProduto", novoProduto)
       .then((response) => {
-        setProduto('');
         router.push("/produtos");
+        click();
+        toast.success("Produto editado com sucesso!");
       })
       .catch((error) => console.log(error));
   }
 
   return (
-    <div className={`${display} w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-50` }>
+    <div className=' w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-50'>
       <div className='w-5/12  bg-white rounded '>
         <form
           onSubmit={handleSubmit}
