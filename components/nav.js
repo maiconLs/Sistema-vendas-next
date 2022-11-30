@@ -19,7 +19,7 @@ export default function Nav() {
           {" "}
           <li className='p-6 text-white font-bold text-xl'>Produtos</li>
         </Link>
-        <Link href='/'>
+        <Link href='/vendas'>
           {" "}
           <li className='p-6 text-white font-bold text-xl'>Vendas</li>
         </Link>

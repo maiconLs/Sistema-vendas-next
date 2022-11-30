@@ -1,8 +1,9 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import { AiOutlineClose } from "react-icons/ai";
 
 export default function NovoProduto({click}) {
   const [novoProduto, setNovoProduto] = useState();
@@ -28,7 +29,7 @@ export default function NovoProduto({click}) {
     e.preventDefault();
 
     await axios
-      .post("/api/criarProduto/", novoProduto)
+      .post("/api/produtos/criarProduto/", novoProduto)
       .then((response) => {
         router.push('/produtos')
         click()
@@ -38,6 +39,12 @@ export default function NovoProduto({click}) {
   }
   return (
     <div className=' w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-40'>
+           <button
+            onClick={() => click()}
+            className='fixed z-50 top-10 right-10'
+          >
+            <AiOutlineClose size={40} />
+          </button>
       <div className='w-5/12  bg-white rounded '>
         <form
           onSubmit={handleSubmit}
@@ -67,6 +74,7 @@ export default function NovoProduto({click}) {
             placeholder='Valor de custo'
             name='valorCusto'
             step="any"
+            pattern="[0-9]+([.][0-9]+)?"
             onChange={handleChange}
           />
           <input
@@ -75,6 +83,7 @@ export default function NovoProduto({click}) {
             placeholder='Valor de venda'
             name='valorVenda'
             step="any"
+            pattern="[0-9]+([.][0-9]+)?"
             onChange={handleChange}
           />
 

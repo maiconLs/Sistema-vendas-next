@@ -1,5 +1,5 @@
-import Produto from "../../Models/Produto";
-import db from "../../utils/db";
+import Produto from "./../../../Models/Produto";
+import db from "./../../../utils/db";
 
 export default async function EditarProduto(req, res) {
   if (req.method !== "PUT") {
@@ -10,7 +10,7 @@ export default async function EditarProduto(req, res) {
 
   if (!produto || !descricao || !valorCusto || !valorVenda) {
     res.status(422).json({
-      message: "Validation error",
+      message: "Preencha todos os campos!",
     });
     return;
   }

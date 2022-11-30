@@ -1,11 +1,7 @@
-import Produto from "../../../Models/Produto";
-import db from "../../../utils/db";
+import Produto from "../../../../Models/Produto";
+import db from "../../../../utils/db";
 
 export default async function excluirProduto(req, res) {
-
-
-  // const { _id } = req.body;
-
   const produto = Produto.findById(req.query.id);
 
   if (!produto) {

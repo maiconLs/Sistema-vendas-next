@@ -1,5 +1,5 @@
-import Produto from "../../Models/Produto";
-import db from "../../utils/db";
+import Produto from "../../../Models/Produto";
+import db from "../../../utils/db";
 
 export default async function criarProduto(req, res) {
   if (req.method !== "POST") {

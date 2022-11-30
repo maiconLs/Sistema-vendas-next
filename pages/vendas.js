@@ -2,18 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
+import db from "../utils/db";
+import Venda from "../Models/Venda";
+
 import Nav from "../components/nav";
 import Header from "../components/header";
-import db from "../utils/db";
-import Produto from "../Models/Produto";
-import NovoProduto from "../components/novoProduto";
-import EditarProduto from "../components/editarProduto";
+import NovaVenda from "../components/novaVenda";
+import EditarVenda from "../components/editarVenda";
 import ExcluirItem from "../components/excluirItem";
 
 import { RiDeleteBin2Line } from "react-icons/ri";
 import { BiEditAlt } from "react-icons/bi";
 
-export default function Produtos({ produtos }) {
+export default function Vendas({ vendas }) {
   const [abrirModal, setAbrirModal] = useState(false);
   const [abrirEditar, setAbrirEditar] = useState(false);
   const [abrirExcluir, setAbrirExcluir] = useState(false);
@@ -24,11 +25,12 @@ export default function Produtos({ produtos }) {
   const router = useRouter();
 
   useEffect(() => {
-    const buscando = produtos.filter((produto) =>
+    const buscando = vendas?.filter((produto) =>
       produto.produto.toLowerCase().includes(busca.toLowerCase())
     );
     setProdutoFiltrado(buscando);
-  }, [busca, produtos, abrirExcluir]);
+  }, [busca, vendas, abrirExcluir]);
+
 
   function Editar(id) {
     setIdProduto(id);
@@ -44,14 +46,14 @@ export default function Produtos({ produtos }) {
     <div>
       <Nav />
       <Header
-        title='Produtos'
+        title='Vendas'
         abrir={() => setAbrirModal(true)}
-        nomeBotao='Novo Produto'
+        nomeBotao='Nova Venda'
         busca={setBusca}
       />
 
       <div className='pl-48 mt-5 '>
-        {produtos.length !== 0 ? (
+        {vendas.length !== 0 ? (
           <table className='w-full '>
             <thead className='bg-slate-100'>
               <tr>
@@ -94,7 +96,7 @@ export default function Produtos({ produtos }) {
                       </td>
                     </tr>
                   ))
-                : produtos.map((produto) => (
+                : vendas.map((produto) => (
                     <tr key={produto._id}>
                       <td className='p-5 w-1/5  text-center'>
                         {produto.produto}
@@ -128,26 +130,26 @@ export default function Produtos({ produtos }) {
           </table>
         ) : (
           <h1 className='font-bold p-5 text-xl'>
-            Não há produtos cadastrados!
+            Não há vendas realizadas!
           </h1>
         )}
       </div>
       {abrirExcluir && (
         <ExcluirItem
-          rota={`api/produtos/excluirProduto/${idProduto}`}
-          atualizar={"produtos"}
+          rota={`api/vendas/excluirVenda/${idProduto}`}
+          atualizar={"/vendas"}
           fechar={() => setAbrirExcluir(false)}
         />
       )}
       {abrirModal && (
         <>
-          <NovoProduto click={() => setAbrirModal(false)} />
+          <NovaVenda click={() => setAbrirModal(false)} />
         </>
       )}
 
       {abrirEditar && (
         <>
-          <EditarProduto id={idProduto} click={() => setAbrirEditar(false)} />{" "}
+          <EditarVenda id={idProduto} click={() => setAbrirEditar(false)} />{" "}
         </>
       )}
     </div>
@@ -156,11 +158,13 @@ export default function Produtos({ produtos }) {
 
 export async function getServerSideProps() {
   await db.connect();
-  const produtos = await Produto.find().sort({ createdAt: -1 }).lean();
-  console.log(produtos);
+  const vendas = await Venda.find().sort({ createdAt: -1 }).lean();
   return {
     props: {
-      produtos: produtos.map(db.convertDocToObj),
+      vendas: vendas.map(db.convertDocToObj) ,
     },
   };
 }
+
+
+

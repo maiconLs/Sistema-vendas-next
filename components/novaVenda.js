@@ -3,54 +3,48 @@ import { useRouter } from "next/router";
 
 import axios from "axios";
 
+import Produto from "../Models/Produto";
+
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 import { AiOutlineClose } from "react-icons/ai";
 
-export default function EditarProduto({ id, click }) {
-  const [novoProduto, setNovoProduto] = useState();
-  const [produto, setProduto] = useState();
+export default function NovaVenda({ click}) {
+  const [novaVenda, setNovaVenda] = useState({});
 
   const router = useRouter();
 
-  useEffect(() => {
-    const data = async () => {
-      await axios
-        .get(`/api/produtos/buscarProduto/${id}`)
-        .then((res) => {
-          setProduto(res.data.produto);
-          setNovoProduto(res.data.produto);
-        })
-        .catch((error) => toast.error(error.response.data.message));
-    };
-
-    data();
-  }, []);
-
   function handleChange(e) {
-    setNovoProduto({ ...novoProduto, [e.target.name]: e.target.value });
+    setNovaVenda({ ...novaVenda, [e.target.name]: e.target.value });
+    console.log(novaVenda);
   }
+
+  useEffect(() => {
+    const data = new Date();
+
+    const criadoEm = `${data.getDate()}/${
+      data.getMonth() + 1
+    }/${data.getFullYear()}`;
+
+    setNovaVenda({ ...novaVenda, criadoEm });
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     await axios
-      .put("/api/produtos/editarProduto", novoProduto)
+      .post("/api/vendas/criarVenda/", novaVenda)
       .then((response) => {
-        router.push("/produtos");
+        router.push("/vendas");
         click();
-        toast.success("Produto editado com sucesso!");
+        toast.success("Venda realizada com sucesso!");
       })
       .catch((error) => toast.error(error.response.data.message));
   }
-
   return (
-    <div className=' w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-50'>
-      <button
-        onClick={() => click()}
-        className='fixed z-50 top-10 right-10'
-      >
+    <div className=' w-full h-full bg-black/[.4] flex flex-row justify-center items-center fixed inset-0 z-40'>
+      <button onClick={() => click()} className='fixed z-50 top-10 right-10'>
         <AiOutlineClose size={40} />
       </button>
       <div className='w-5/12  bg-white rounded '>
@@ -59,7 +53,7 @@ export default function EditarProduto({ id, click }) {
           className='flex flex-col justify-center items-center m-7'
         >
           <h2 className='font-bold text-2xl text-slate-700 p-3 '>
-            Editar produto
+            Cadastrar nova venda
           </h2>
 
           <input
@@ -68,7 +62,6 @@ export default function EditarProduto({ id, click }) {
             placeholder='Nome do produto'
             name='produto'
             onChange={handleChange}
-            defaultValue={produto?.produto}
           />
           <input
             className='rounded border p-2 w-72 outline-none ring-indigo-300 m-4 focus:ring'
@@ -76,37 +69,44 @@ export default function EditarProduto({ id, click }) {
             placeholder='Descrição'
             name='descricao'
             onChange={handleChange}
-            defaultValue={produto?.descricao}
           />
           <input
             className='rounded border p-2 w-72 outline-none ring-indigo-300 m-4 focus:ring'
-            type='text'
+            type='number'
             placeholder='Valor de custo'
             name='valorCusto'
-            onChange={handleChange}
             step='any'
             pattern='[0-9]+([.][0-9]+)?'
-            defaultValue={produto?.valorCusto}
+            onChange={handleChange}
           />
           <input
             className='rounded border p-2 w-72 outline-none ring-indigo-300 m-4 focus:ring'
-            type='text'
+            type='number'
             placeholder='Valor de venda'
             name='valorVenda'
-            onChange={handleChange}
             step='any'
             pattern='[0-9]+([.][0-9]+)?'
-            defaultValue={produto?.valorVenda}
+            onChange={handleChange}
           />
 
           <button
             className='w-72 bg-lime-400 rounded h-10 text-white font-bold m-2'
             type='submit'
           >
-            Editar
+            Cadastrar
           </button>
         </form>
       </div>
     </div>
   );
 }
+
+// export async function getServerSideProps() {
+//     await db.connect();
+//     const produtos = await Produto.find().sort({ createdAt: -1 }).lean();
+//     return {
+//       props: {
+//         produtos: produtos?.map(db.convertDocToObj) || '',
+//       },
+//     };
+//   }

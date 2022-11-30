@@ -8,19 +8,19 @@ import "react-toastify/dist/ReactToastify.min.css";
 
 import { AiOutlineClose } from "react-icons/ai";
 
-export default function EditarProduto({ id, click }) {
-  const [novoProduto, setNovoProduto] = useState();
-  const [produto, setProduto] = useState();
+export default function EditarVenda({ id, click }) {
+  const [novaVenda, setNovaVenda] = useState();
+  const [venda, setVenda] = useState();
 
   const router = useRouter();
 
   useEffect(() => {
     const data = async () => {
       await axios
-        .get(`/api/produtos/buscarProduto/${id}`)
+        .get(`/api/vendas/buscarVenda/${id}`)
         .then((res) => {
-          setProduto(res.data.produto);
-          setNovoProduto(res.data.produto);
+          setVenda(res.data.venda);
+          setNovaVenda(res.data.venda);
         })
         .catch((error) => toast.error(error.response.data.message));
     };
@@ -29,18 +29,18 @@ export default function EditarProduto({ id, click }) {
   }, []);
 
   function handleChange(e) {
-    setNovoProduto({ ...novoProduto, [e.target.name]: e.target.value });
+    setNovaVenda({ ...novaVenda, [e.target.name]: e.target.value });
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     await axios
-      .put("/api/produtos/editarProduto", novoProduto)
+      .put("/api/vendas/editarVenda", novaVenda)
       .then((response) => {
-        router.push("/produtos");
+        router.push("/vendas");
         click();
-        toast.success("Produto editado com sucesso!");
+        toast.success("Venda editada com sucesso!");
       })
       .catch((error) => toast.error(error.response.data.message));
   }
@@ -59,16 +59,16 @@ export default function EditarProduto({ id, click }) {
           className='flex flex-col justify-center items-center m-7'
         >
           <h2 className='font-bold text-2xl text-slate-700 p-3 '>
-            Editar produto
+            Editar venda
           </h2>
 
           <input
             className='rounded border p-2 w-72 outline-none ring-indigo-300 m-4 focus:ring'
             type='text'
             placeholder='Nome do produto'
-            name='produto'
+            name='venda'
             onChange={handleChange}
-            defaultValue={produto?.produto}
+            value={venda?.venda}
           />
           <input
             className='rounded border p-2 w-72 outline-none ring-indigo-300 m-4 focus:ring'
@@ -76,7 +76,7 @@ export default function EditarProduto({ id, click }) {
             placeholder='Descrição'
             name='descricao'
             onChange={handleChange}
-            defaultValue={produto?.descricao}
+            value={venda?.descricao}
           />
           <input
             className='rounded border p-2 w-72 outline-none ring-indigo-300 m-4 focus:ring'
@@ -86,7 +86,7 @@ export default function EditarProduto({ id, click }) {
             onChange={handleChange}
             step='any'
             pattern='[0-9]+([.][0-9]+)?'
-            defaultValue={produto?.valorCusto}
+            value={venda?.valorCusto}
           />
           <input
             className='rounded border p-2 w-72 outline-none ring-indigo-300 m-4 focus:ring'
@@ -96,7 +96,7 @@ export default function EditarProduto({ id, click }) {
             onChange={handleChange}
             step='any'
             pattern='[0-9]+([.][0-9]+)?'
-            defaultValue={produto?.valorVenda}
+            value={venda?.valorVenda}
           />
 
           <button
