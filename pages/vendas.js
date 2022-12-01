@@ -57,30 +57,34 @@ export default function Vendas({ vendas }) {
           <table className='w-full '>
             <thead className='bg-slate-100'>
               <tr>
-                <th className='p-5 w-1/5  text-center'>Produto</th>
-                <th className='p-5 w-1/5  text-center'>Valor de Custo</th>
-                <th className='p-5 w-1/5  text-center'>Valor de Venda</th>
-                <th className='p-5 w-1/5  text-center'>Criado em</th>
-                <th className='p-5 w-1/5  text-center'>#</th>
+                <th className='p-5 w-1/6  text-center'>Produto</th>
+                <th className='p-5 w-1/6  text-center'>Valor de Custo</th>
+                <th className='p-5 w-1/6  text-center'>Valor de Venda</th>
+                <th className='p-5 w-1/6  text-center'>Última venda</th>
+                <th className='p-5 w-1/6  text-center'>Quantidade de vendas</th>
+                <th className='p-5 w-1/6  text-center'>#</th>
               </tr>
             </thead>
             <tbody className='bg-slate-50'>
               {produtoFiltrado
                 ? produtoFiltrado.map((produto) => (
                     <tr key={produto._id}>
-                      <td className='p-5 w-1/5  text-center'>
+                      <td className='p-5 w-1/6  text-center'>
                         {produto.produto}
                       </td>
-                      <td className='p-5 w-1/5  text-center'>
+                      <td className='p-5 w-1/6  text-center'>
                         R$ {produto.valorCusto}
                       </td>
-                      <td className='p-5 w-1/5  text-center'>
+                      <td className='p-5 w-1/6  text-center'>
                         R$ {produto.valorVenda}
                       </td>
-                      <td className='p-5 w-1/5  text-center'>
-                        {produto.criadoEm}
+                      <td className='p-5 w-1/6  text-center'>
+                        R$ {produto.criadoEm}
                       </td>
-                      <td className='p-5 w-1/5  text-center'>
+                      <td className='p-5 w-1/6  text-center'>
+                        {produto.quantidade}
+                      </td>
+                      <td className='p-5 w-1/6  text-center'>
                         <button
                           className='mr-5'
                           onClick={() => Editar(produto._id)}
@@ -98,19 +102,22 @@ export default function Vendas({ vendas }) {
                   ))
                 : vendas.map((produto) => (
                     <tr key={produto._id}>
-                      <td className='p-5 w-1/5  text-center'>
+                      <td className='p-5 w-1/6  text-center'>
                         {produto.produto}
                       </td>
-                      <td className='p-5 w-1/5  text-center'>
+                      <td className='p-5 w-1/6  text-center'>
                         R$ {produto.valorCusto}
                       </td>
-                      <td className='p-5 w-1/5  text-center'>
+                      <td className='p-5 w-1/6  text-center'>
                         R$ {produto.valorVenda}
                       </td>
-                      <td className='p-5 w-1/5  text-center'>
+                      <td className='p-5 w-1/6  text-center'>
                         {produto.criadoEm}
                       </td>
-                      <td className='p-5 w-1/5  text-center'>
+                      <td className='p-5 w-1/6  text-center'>
+                        {produto.quantidade}
+                      </td>
+                      <td className='p-5 w-1/6  text-center'>
                         <button
                           className='mr-5'
                           onClick={() => Editar(produto._id)}

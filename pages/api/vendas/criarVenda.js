@@ -6,7 +6,7 @@ export default async function criarVenda(req, res) {
     return;
   }
 
-  const { produto, descricao, valorCusto, valorVenda, criadoEm } = req.body;
+  const { _id, produto, descricao, valorCusto, valorVenda, criadoEm } = req.body;
 
 
   await db.connect();
@@ -21,13 +21,16 @@ export default async function criarVenda(req, res) {
     produtoExistente.descricao = descricao
     produtoExistente.valorCusto = valorCusto
     produtoExistente.valorVenda = valorVenda
-    produtoExistente.quantidade = + 1
+    produtoExistente.criadoEm = criadoEm
+    produtoExistente.quantidade = produtoExiste.quantidade += 1
 
-    await Venda.findByIdAndUpdate(_id, editar);
+    await Venda.findOneAndUpdate({produto: produto}, produtoExistente);
+
 
     await db.disconnect();
     res.send({
-     message: 'Venda realizada!'
+     message: 'Venda realizada com sucesso!',
+     produto: produtoExistente
     });
 
     return
@@ -50,6 +53,6 @@ export default async function criarVenda(req, res) {
     valorCusto,
     valorVenda,
     criadoEm,
-    quantidade
+    quantidade: 1
   });
 }

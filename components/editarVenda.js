@@ -68,7 +68,7 @@ export default function EditarVenda({ id, click }) {
             placeholder='Nome do produto'
             name='venda'
             onChange={handleChange}
-            value={venda?.venda}
+            value={venda?.produto}
           />
           <input
             className='rounded border p-2 w-72 outline-none ring-indigo-300 m-4 focus:ring'
