@@ -165,7 +165,7 @@ export default function Vendas({ vendas }) {
 
 export async function getServerSideProps() {
   await db.connect();
-  const vendas = await Venda.find().sort({ createdAt: -1 }).lean();
+  const vendas = await Venda.find().sort({ updatedAt: -1 }).lean();
   return {
     props: {
       vendas: vendas.map(db.convertDocToObj) ,

@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Nav() {
   return (
-    <div className='fixed overflow-auto z-30 w-48 min-h-screen bg-slate-500 '>
+    <div className='fixed overflow-auto z-30 w-48 h-screen bg-slate-500 '>
       <ul className='w-full'>
         <Link href='/'>
           {" "}
@@ -13,7 +13,7 @@ export default function Nav() {
 
         <Link href='/'>
           {" "}
-          <li className='p-6 text-white font-bold text-xl'>Home</li>
+          <li className='p-6 text-white font-bold text-xl'>Inicio</li>
         </Link>
         <Link href='/produtos'>
           {" "}
@@ -23,10 +23,7 @@ export default function Nav() {
           {" "}
           <li className='p-6 text-white font-bold text-xl'>Vendas</li>
         </Link>
-        <Link href='/'>
-          {" "}
-          <li className='p-6 text-white font-bold text-xl'>Despesas</li>
-        </Link>
+     
       </ul>
     </div>
   );

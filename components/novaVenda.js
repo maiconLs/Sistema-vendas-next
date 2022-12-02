@@ -77,7 +77,7 @@ export default function NovaVenda({ click }) {
               type='text'
               placeholder='Nome do produto'
               name='produto'
-              autocomplete="off"
+              autoComplete="off"
               onChange={(e) => setBuscar(e.target.value)}
             />
 
