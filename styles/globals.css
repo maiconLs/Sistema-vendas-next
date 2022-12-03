@@ -11,3 +11,15 @@
 body{
     font-family: Arial, Helvetica, sans-serif;
 }
+
+.link{
+    @apply p-6 text-white font-bold text-xl cursor-pointer
+}
+
+.link:hover{
+    @apply bg-slate-600
+}
+
+.active{
+    @apply p-6 text-white font-bold text-xl bg-slate-600
+}
