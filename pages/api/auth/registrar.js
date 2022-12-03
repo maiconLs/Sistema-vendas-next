@@ -1,4 +1,4 @@
-import User from "../../../models/User";
+import User from "../../../Models/User";
 import db from "../../../utils/db";
 
 async function handler(req, res) {

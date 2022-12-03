@@ -12,11 +12,6 @@ export default function Login() {
   const nome = session?.user?.name;
   const email = session?.user?.email;
 
-  const usuarioExiste = async () =>
-    await axios
-      .get("/api/auth/buscarUser", email)
-      .then((res) => setUsuario(res.data));
-
   async function login() {
     await axios
       .post("/api/auth/registrar", { nome, email })
@@ -25,13 +20,20 @@ export default function Login() {
   }
 
   useEffect(() => {
-    if (status === "authenticated" && usuario === null) {
+    const usuarioExiste = async () => {
+      await axios.get("/api/auth/buscarUser", email).then((res) => {
+        setUsuario(res.data), console.log(res.data);
+      });
+    };
+
+    usuarioExiste()
+    if (session && !usuario) {
       login();
       router.push("/inicio");
       return;
     }
 
-    if (status === "authenticated") {
+    if (session) {
       router.push("/inicio");
     }
   }, [session]);

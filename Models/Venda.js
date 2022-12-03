@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const VendaSchema = new mongoose.Schema(
   {
-    user: { type: String, ref: 'User', required: true },
+    usuario: { type: String, ref: 'User', required: true },
 
     produto: { type: String, required: true },
     descricao: { type: String, required: true },

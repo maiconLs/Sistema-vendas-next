@@ -139,13 +139,12 @@ export async function getServerSideProps(context) {
   );
   const { user } = session;
   await db.connect();
-  const produtos = await Produto.find({ user: user.email })
+  const produtos = await Produto.find({ usuario: user.email })
     .sort({ createdAt: -1 })
     .lean();
-  const vendas = await Venda.find({ user: user.email })
+  const vendas = await Venda.find({ usuario: user.email })
     .sort({ updatedAt: -1 })
     .lean();
-  console.log(produtos);
   return {
     props: {
       produtos: produtos.map(db.convertDocToObj),

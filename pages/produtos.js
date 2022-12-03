@@ -187,7 +187,7 @@ export async function getServerSideProps(context) {
   );
   const { user } = session;
   await db.connect();
-  const produtos = await Produto.find({ user: user.email })
+  const produtos = await Produto.find({ usuario: user.email })
     .sort({ createdAt: -1 })
     .lean();
   return {

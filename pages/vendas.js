@@ -193,7 +193,7 @@ export async function getServerSideProps(context) {
   );
   const { user } = session;
   await db.connect();
-  const vendas = await Venda.find({ user: user.email })
+  const vendas = await Venda.find({ usuario: user.email })
     .sort({ updatedAt: -1 })
     .lean();
   return {
