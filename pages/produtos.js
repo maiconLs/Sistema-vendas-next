@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { unstable_getServerSession } from "next-auth/next"
+
 import Nav from "../components/nav";
 import Header from "../components/header";
 import db from "../utils/db";
@@ -22,6 +25,7 @@ export default function Produtos({ produtos }) {
   const [produtoFiltrado, setProdutoFiltrado] = useState();
 
   const router = useRouter();
+
 
   useEffect(() => {
     const buscando = produtos.filter((produto) =>
@@ -50,11 +54,11 @@ export default function Produtos({ produtos }) {
         busca={setBusca}
       />
 
-      <div className='pl-48 mt-5 '>
+      <div className='pl-48 mt-5 max-[600px]:pl-0 '>
         {produtos.length !== 0 ? (
           <table className='w-full '>
             <thead className='bg-slate-100'>
-              <tr>
+              <tr className='border-b-2 border-slate-200'>
                 <th className='p-5 w-1/5  text-center'>Produto</th>
                 <th className='p-5 w-1/5  text-center'>Valor de Custo</th>
                 <th className='p-5 w-1/5  text-center'>Valor de Venda</th>
@@ -62,10 +66,13 @@ export default function Produtos({ produtos }) {
                 <th className='p-5 w-1/5  text-center'>#</th>
               </tr>
             </thead>
-            <tbody className='bg-slate-50'>
+            <tbody>
               {produtoFiltrado
                 ? produtoFiltrado.map((produto) => (
-                    <tr key={produto._id}>
+                    <tr
+                      className='border-b-2 border-slate-200'
+                      key={produto._id}
+                    >
                       <td className='p-5 w-1/5  text-center'>
                         {produto.produto}
                       </td>
@@ -154,13 +161,18 @@ export default function Produtos({ produtos }) {
   );
 }
 
-export async function getServerSideProps() {
+Produtos.auth = true;
+
+export async function getServerSideProps(context) {
+  const session = await unstable_getServerSession(context.req, context.res, authOptions)  
+  const { user } = session
   await db.connect();
-  const produtos = await Produto.find().sort({ createdAt: -1 }).lean();
-  console.log(produtos);
+  const produtos = await Produto.find({user: user.email})
+    .sort({ createdAt: -1 })
+    .lean();
   return {
     props: {
-      produtos: produtos.map(db.convertDocToObj),
+      produtos: produtos.map(db.convertDocToObj), 
     },
   };
 }

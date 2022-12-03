@@ -3,7 +3,7 @@ import React, { useState } from "react";
 export default function Header({ title, abrir, nomeBotao, busca }) {
   return (
     <div>
-      <div className='bg-slate-200 w-full h-20 pl-56 p-7 flex flex-row justify-between items-center'>
+      <div className='bg-slate-200 w-full h-20 pl-56 p-7 flex flex-row justify-between items-center max-[600px]:pl-0 max-[600px]:mt-36'>
         <div className="w-28">
           <h1 className='text-2xl font-bold text-slate-800'>{title}</h1>
         </div>
@@ -13,7 +13,7 @@ export default function Header({ title, abrir, nomeBotao, busca }) {
             className='rounded border p-2 w-56 outline-none ring-indigo-300  focus:ring'
             type='text'
             onChange={(e) => busca(e.target.value)}
-            placeholder='Buscar produto..'
+            placeholder='Buscar item..'
           />
         </div>
         <button

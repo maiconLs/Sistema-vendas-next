@@ -1,10 +1,13 @@
 
+import { getSession } from 'next-auth/react'
 import Produto from '../../../Models/Produto'
 import db from '../../../utils/db'
 
 const handler = async (req, res) => {
+  const session = await getSession({ req })
+  const {user} = session
   await db.connect()
-  const produto = await Produto.find()
+  const produto = await Produto.find({user: user.email})
 
   if(!produto) {
     res.status(404).json({message: 'Produto não encontrado!'})

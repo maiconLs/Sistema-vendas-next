@@ -4,10 +4,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { AiOutlineClose } from "react-icons/ai";
+import { useSession } from "next-auth/react";
 
 export default function NovoProduto({click}) {
   const [novoProduto, setNovoProduto] = useState();
+  const { data: session } = useSession();
 
+  const user = session.user.email
   const router = useRouter();
 
   function handleChange(e) {
@@ -22,7 +25,7 @@ export default function NovoProduto({click}) {
       data.getMonth() + 1
     }/${data.getFullYear()}`;
 
-    setNovoProduto({ ...novoProduto, criadoEm });
+    setNovoProduto({ ...novoProduto, criadoEm, user});
   }, []);
 
   async function handleSubmit(e) {
@@ -74,7 +77,7 @@ export default function NovoProduto({click}) {
             placeholder='Valor de custo'
             name='valorCusto'
             step="any"
-            pattern="[0-9]+([.][0-9]+)?"
+            pattern="[0-9]+([,/.][0-9]+)?"
             onChange={handleChange}
           />
           <input
@@ -83,7 +86,7 @@ export default function NovoProduto({click}) {
             placeholder='Valor de venda'
             name='valorVenda'
             step="any"
-            pattern="[0-9]+([.][0-9]+)?"
+            pattern="[0-9]+([,/.][0-9]+)?"
             onChange={handleChange}
           />
 

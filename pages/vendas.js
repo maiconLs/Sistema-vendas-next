@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { unstable_getServerSession } from "next-auth/next"
+
 import db from "../utils/db";
 import Venda from "../Models/Venda";
 
@@ -56,7 +59,7 @@ export default function Vendas({ vendas }) {
         {vendas.length !== 0 ? (
           <table className='w-full '>
             <thead className='bg-slate-100'>
-              <tr>
+              <tr className="border-b-2 border-slate-200">
                 <th className='p-5 w-1/6  text-center'>Produto</th>
                 <th className='p-5 w-1/6  text-center'>Valor de Custo</th>
                 <th className='p-5 w-1/6  text-center'>Valor de Venda</th>
@@ -65,10 +68,10 @@ export default function Vendas({ vendas }) {
                 <th className='p-5 w-1/6  text-center'>#</th>
               </tr>
             </thead>
-            <tbody className='bg-slate-50'>
+            <tbody >
               {produtoFiltrado
                 ? produtoFiltrado.map((produto) => (
-                    <tr key={produto._id}>
+                    <tr className="border-b-2 border-slate-200" key={produto._id}>
                       <td className='p-5 w-1/6  text-center'>
                         {produto.produto}
                       </td>
@@ -163,9 +166,13 @@ export default function Vendas({ vendas }) {
   );
 }
 
-export async function getServerSideProps() {
+Vendas.auth = true
+
+export async function getServerSideProps(context) {
+  const session = await unstable_getServerSession(context.req, context.res, authOptions)  
+  const { user } = session
   await db.connect();
-  const vendas = await Venda.find().sort({ updatedAt: -1 }).lean();
+  const vendas = await Venda.find({user: user.email}).sort({ updatedAt: -1 }).lean();
   return {
     props: {
       vendas: vendas.map(db.convertDocToObj) ,

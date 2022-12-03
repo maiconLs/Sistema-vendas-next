@@ -1,18 +1,17 @@
-
-import Venda from '../../../../Models/Venda'
-import db from '../../../../utils/db'
+import Venda from "../../../../Models/Venda";
+import db from "../../../../utils/db";
 
 const handler = async (req, res) => {
-  await db.connect()
-  const venda = await Venda.findById(req.query.id)
+  await db.connect();
+  const venda = await Venda.findById(req.query.id);
 
-  if(!venda) {
-    res.status(404).json({message: 'Venda não encontrado!'})
+  if (!venda) {
+    res.status(404).json({ message: "Venda não encontrado!" });
   }
-  await db.disconnect()
+  await db.disconnect();
   res.status(200).json({
-    venda: venda
-  })
-}
+    venda: venda,
+  });
+};
 
-export default handler
+export default handler;

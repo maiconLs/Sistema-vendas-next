@@ -7,17 +7,21 @@ import "react-toastify/dist/ReactToastify.min.css";
 
 import { AiOutlineClose } from "react-icons/ai";
 
+import { useSession } from "next-auth/react";
+
 export default function NovaVenda({ click }) {
   const [novaVenda, setNovaVenda] = useState();
   const [produtos, setProdutos] = useState();
   const [produtoFiltrado, setProdutoFiltrado] = useState();
   const [buscar, setBuscar] = useState("");
 
+  const { data: session } = useSession();
+  const user = session.user.email
+
   const router = useRouter();
 
   function escolherProduto(e) {
-    setNovaVenda(e);
-    setBuscar("");
+    setNovaVenda({...e, user})
   }
 
   useEffect(() => {

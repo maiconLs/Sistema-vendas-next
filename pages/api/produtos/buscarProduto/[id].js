@@ -1,8 +1,10 @@
 
+import { getSession } from 'next-auth/react'
 import Produto from '../../../../Models/Produto'
 import db from '../../../../utils/db'
 
 const handler = async (req, res) => {
+  const session = await getSession({ req })
   await db.connect()
   const produto = await Produto.findById(req.query.id)
 
