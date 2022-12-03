@@ -18,13 +18,13 @@ export default function NovoProduto({click}) {
 
   useEffect(() => {
     const data = new Date();
-    const user = session.user?.email
+    const usuario = session.user?.email
 
     const criadoEm = `${data.getDate()}/${
       data.getMonth() + 1
     }/${data.getFullYear()}`;
 
-    setNovoProduto({ ...novoProduto, criadoEm, user});
+    setNovoProduto({ ...novoProduto, criadoEm, usuario});
   }, []);
 
   async function handleSubmit(e) {

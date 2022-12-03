@@ -59,7 +59,7 @@ export default function Vendas({ vendas }) {
         busca={setBusca}
       />
 
-      <div className='pl-48 mt-5 '>
+      <div className='pl-48 mt-5 max-[600px]:pl-0'>
         {vendas.length !== 0 ? (
           <table className='w-full '>
             <thead className='bg-slate-100'>

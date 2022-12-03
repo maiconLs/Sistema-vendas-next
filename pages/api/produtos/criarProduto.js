@@ -6,7 +6,7 @@ export default async function criarProduto(req, res) {
     return;
   }
 
-  const { produto, descricao, valorCusto, valorVenda, criadoEm, user } = req.body;
+  const { produto, descricao, valorCusto, valorVenda, criadoEm, usuario } = req.body;
 
   if (!produto || !descricao || !valorCusto || !valorVenda) {
     res.status(422).json({
@@ -17,7 +17,7 @@ export default async function criarProduto(req, res) {
   await db.connect();
   const produtoExiste = await Produto.findOne({ produto: produto  });
 
-  if (produtoExiste?.user === user) {
+  if (produtoExiste?.usuario === usuario) {
     res.status(422).json({ message: "Esse produto já existe" });
     return;
   }
@@ -28,7 +28,7 @@ export default async function criarProduto(req, res) {
     valorCusto,
     valorVenda,
     criadoEm,
-    user
+    usuario
   });
 
   await novoProduto.save();

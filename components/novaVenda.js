@@ -16,12 +16,12 @@ export default function NovaVenda({ click }) {
   const [buscar, setBuscar] = useState("");
 
   const { data: session } = useSession();
-  const user = session.user.email
+  const usuario = session.user.email
 
   const router = useRouter();
 
   function escolherProduto(e) {
-    setNovaVenda({...e, user})
+    setNovaVenda({...e, usuario})
   }
 
   useEffect(() => {

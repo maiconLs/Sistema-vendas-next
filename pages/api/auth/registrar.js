@@ -20,13 +20,13 @@ async function handler(req, res) {
     email,
   });
 
-  const user = await newUser.save();
+  const usuario = await newUser.save();
   await db.disconnect();
   res.status(201).send({
     message: "Created user!",
-    _id: user._id,
-    nome: user.nome,
-    email: user.email,
+    _id: usuario._id,
+    nome: usuario.nome,
+    email: usuario.email,
   });
 }
 

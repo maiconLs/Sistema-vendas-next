@@ -6,11 +6,11 @@ export default async function criarVenda(req, res) {
     return;
   }
 
-  const { _id, produto, descricao, valorCusto, valorVenda, criadoEm, user } = req.body;
+  const { _id, produto, descricao, valorCusto, valorVenda, criadoEm, usuario } = req.body;
 
 
   await db.connect();
-  const produtoExiste = await Venda.findOne({ user: user, produto: produto });
+  const produtoExiste = await Venda.findOne({ usuario: usuario, produto: produto });
 
   if (produtoExiste) {
     await db.connect();
@@ -22,7 +22,7 @@ export default async function criarVenda(req, res) {
     produtoExistente.valorCusto = valorCusto
     produtoExistente.valorVenda = valorVenda
     produtoExistente.criadoEm = criadoEm
-    produtoExistente.user = user
+    produtoExistente.usuario = usuario
     produtoExistente.quantidade = produtoExiste.quantidade += 1
 
     await Venda.findOneAndUpdate({produto: produto}, produtoExistente);
@@ -43,7 +43,7 @@ export default async function criarVenda(req, res) {
     valorCusto,
     valorVenda,
     criadoEm,
-    user,
+    usuario,
     quantidade: 1,
 
   });
@@ -56,7 +56,7 @@ export default async function criarVenda(req, res) {
     valorCusto,
     valorVenda,
     criadoEm,
-    user,
+    usuario,
     quantidade: 1
   });
 }
