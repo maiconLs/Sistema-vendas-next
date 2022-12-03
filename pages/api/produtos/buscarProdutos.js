@@ -1,10 +1,10 @@
-
-import { getSession } from 'next-auth/react'
+import { authOptions } from 'pages/api/auth/[...nextauth]'
+import { unstable_getServerSession } from "next-auth/next"
 import Produto from '../../../Models/Produto'
 import db from '../../../utils/db'
 
 const handler = async (req, res) => {
-  const session = await getSession({ req })
+  const session = await unstable_getServerSession(req, res, authOptions)
   const {user} = session
   await db.connect()
   const produto = await Produto.find({usuario: user.email})
