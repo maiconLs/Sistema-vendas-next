@@ -10,16 +10,15 @@ export default function NovoProduto({click}) {
   const [novoProduto, setNovoProduto] = useState();
   const { data: session } = useSession();
 
-  const user = session.user.email
   const router = useRouter();
 
   function handleChange(e) {
     setNovoProduto({ ...novoProduto, [e.target.name]: e.target.value });
-    console.log(novoProduto);
   }
 
   useEffect(() => {
     const data = new Date();
+    const user = session.user?.email
 
     const criadoEm = `${data.getDate()}/${
       data.getMonth() + 1
@@ -77,7 +76,7 @@ export default function NovoProduto({click}) {
             placeholder='Valor de custo'
             name='valorCusto'
             step="any"
-            pattern="[0-9]+([,/.][0-9]+)?"
+            pattern="[0-9]+([0-9]+)?"
             onChange={handleChange}
           />
           <input
@@ -86,7 +85,7 @@ export default function NovoProduto({click}) {
             placeholder='Valor de venda'
             name='valorVenda'
             step="any"
-            pattern="[0-9]+([,/.][0-9]+)?"
+            pattern="[0-9]+([0-9]+)?"
             onChange={handleChange}
           />
 

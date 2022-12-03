@@ -1,138 +1,62 @@
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import Nav from "../components/nav";
-import Header from "../components/header";
+import { useSession, signIn, signOut } from "next-auth/react";
+import axios from "axios";
+import { useRouter } from "next/router";
 
-import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { unstable_getServerSession } from "next-auth/next"
-import { useSession, signIn, signOut } from "next-auth/react"
-import { useRouter } from 'next/router'
-import db from "../utils/db";
+export default function Login() {
+  const { data: session, status } = useSession();
+  const [usuario, setUsuario] = useState();
 
-import Venda from "../Models/Venda";
-import Produto from "../Models/Produto";
+  const router = useRouter();
+  const nome = session?.user?.name;
+  const email = session?.user?.email;
 
-export default function Home({ produtos, vendas }) {
-  const { data: session, status } = useSession()
-  const router = useRouter()
-  const data = new Date();
+  const usuarioExiste = async () =>
+    await axios
+      .get("/api/auth/buscarUser", email)
+      .then((res) => setUsuario(res.data));
 
-  const criadoEm = `${data.getDate()}/${
-    data.getMonth() + 1
-  }/${data.getFullYear()}`;
+  async function login() {
+    await axios
+      .post("/api/auth/registrar", { nome, email })
+      .then((res) => console.log(res.data))
+      .catch((error) => console.log(error));
+  }
 
-  const totalValorVenda = vendas.reduce(
-    (accumulator, value) => accumulator + value.valorVenda * value.quantidade,
-    0
-  );
-  const totalLucro = vendas.reduce(
-    (accumulator, value) =>
-      accumulator + (value.valorVenda - value.valorCusto) * value.quantidade,
-    0
-  );
-  const totalQuantidadeVenda = vendas.reduce(
-    (accumulator, value) => accumulator + value.quantidade,
-    0
-  );
+  useEffect(() => {
+    if (status === "authenticated" && usuario === null) {
+      login();
+      router.push("/inicio");
+      return;
+    }
 
-  const quantidadeProdutos = produtos.length;
+    if (status === "authenticated") {
+      router.push("/inicio");
+    }
+  }, [session]);
 
-  const vendaHoje = vendas.filter((venda) => venda.criadoEm == criadoEm);
-
-  const maisVendidos = vendas.sort((a, b) => b.quantidade - a.quantidade);
-
-
-  
   return (
-    <div>
+    <div className='relative flex flex-col justify-center min-h-screen overflow-hidden '>
       <Head>
-        <title>Início</title>
+        <title>Login</title>
         <meta name='description' content='My app' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <Nav />
-      <header className='bg-slate-200 w-full h-20 pl-56 p-7 flex flex-row justify-start items-center max-[600px]:hidden'>
-        <h1 className='text-2xl font-bold text-slate-800'>Início</h1>
-      </header>
-      <main className='pl-48  flex flex-row mt-5  h-[85vh] max-[600px]:flex-col max-[600px]:pl-0 max-[600px]:mt-36'>
-        <section className='flex flex-col justify-start items-center h-full  w-1/2 border-r-2 border-slate-200 max-[600px]:w-screen  '>
-          <h1 className='font-bold text-2xl text-slate-700 w-full text-center bg-slate-100 p-3'>
-            Vendas
-          </h1>
-          <div className='w-full p-5'>
-            <p className='p-5 text-xl text-slate-700 border-b-2'>
-              <b>Valor total:</b> R$ {totalValorVenda}
-            </p>
-            <p className='p-5 text-xl text-slate-700 border-b-2'>
-              <b>Lucro total:</b> R$ {totalLucro}
-            </p>
-            <p className='p-5 text-xl text-slate-700 border-b-2'>
-              <b>Quantidade de vendas:</b> {totalQuantidadeVenda}
-            </p>
-          </div>
-        </section>
-        <section className='flex flex-col justify-start items-center h-full  w-1/2 max-[600px]:w-screen'>
-          <h1 className='font-bold text-2xl text-slate-700 w-full text-center bg-slate-100 p-3'>
-            Produtos
-          </h1>
-          <div className='w-full p-5'>
-            <p className='p-5 text-xl text-slate-700 border-b-2'>
-              <b>Quantidade de produtos:</b> {quantidadeProdutos}
-            </p>
-            <h2 className='p-5 text-xl text-slate-700 '>
-              <b>Produtos mais vendidos:</b>
-            </h2>
-            <table>
-              <thead>
-                <tr>
-                  <th className='p-5 w-1/3 border text-lg text-slate-600  text-center'>
-                    Produto
-                  </th>
-                  <th className='p-5 w-1/3 border text-lg text-slate-600  text-center'>
-                    QTD
-                  </th>
-                  <th className='p-5 w-1/3 border text-lg text-slate-600  text-center'>
-                    Total
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {maisVendidos.slice(0, 5).map((maisVendido) => (
-                  <tr key={maisVendido._id}>
-                    <td className='p-5 w-1/3 border text-lg text-slate-600  text-center'>
-                      {maisVendido.produto}
-                    </td>
-                    <td className='p-5 w-1/3 border text-lg text-slate-600  text-center'>
-                      {maisVendido.quantidade}
-                    </td>
-                    <td className='p-5 w-1/3 border text-lg text-slate-600  text-center'>
-                      R$ {maisVendido.valorVenda * maisVendido.quantidade}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </main>
+      <div className='w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl'>
+        <h1 className='text-3xl font-semibold text-center text-slate-700 underline'>
+          Login
+        </h1>
+
+        <div className='mt-6'>
+          <button
+            onClick={() => signIn()}
+            className='w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-slate-600 rounded-md hover:bg-slate-600 focus:outline-none focus:bg-slate-600'
+          >
+            Entrar com google
+          </button>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
-
-Home.auth= true
-
-export async function getServerSideProps(context) {
-  const session = await unstable_getServerSession(context.req, context.res, authOptions)  
-  const { user } = session
-  await db.connect();
-  const produtos = await Produto.find({user: user.email}).sort({ createdAt: -1 }).lean();
-  const vendas = await Venda.find({user: user.email}).sort({ updatedAt: -1 }).lean();
-  console.log(produtos);
-  return {
-    props: {
-      produtos: produtos.map(db.convertDocToObj),
-      vendas: vendas.map(db.convertDocToObj),
-    },
-  };
-}
-
-

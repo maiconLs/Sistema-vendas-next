@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { unstable_getServerSession } from "next-auth/next"
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { unstable_getServerSession } from "next-auth/next";
 
 import Nav from "../components/nav";
 import Header from "../components/header";
@@ -26,7 +26,6 @@ export default function Produtos({ produtos }) {
 
   const router = useRouter();
 
-
   useEffect(() => {
     const buscando = produtos.filter((produto) =>
       produto.produto.toLowerCase().includes(busca.toLowerCase())
@@ -46,6 +45,11 @@ export default function Produtos({ produtos }) {
 
   return (
     <div>
+      <Head>
+        <title>Produtos</title>
+        <meta name='description' content='My app' />
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
       <Nav />
       <Header
         title='Produtos'
@@ -77,10 +81,16 @@ export default function Produtos({ produtos }) {
                         {produto.produto}
                       </td>
                       <td className='p-5 w-1/5  text-center'>
-                        R$ {produto.valorCusto}
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(produto.valorCusto)}
                       </td>
                       <td className='p-5 w-1/5  text-center'>
-                        R$ {produto.valorVenda}
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(produto.valorVenda)}
                       </td>
                       <td className='p-5 w-1/5  text-center'>
                         {produto.criadoEm}
@@ -107,10 +117,16 @@ export default function Produtos({ produtos }) {
                         {produto.produto}
                       </td>
                       <td className='p-5 w-1/5  text-center'>
-                        R$ {produto.valorCusto}
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(produto.valorCusto)}
                       </td>
                       <td className='p-5 w-1/5  text-center'>
-                        R$ {produto.valorVenda}
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(produto.valorVenda)}
                       </td>
                       <td className='p-5 w-1/5  text-center'>
                         {produto.criadoEm}
@@ -164,15 +180,19 @@ export default function Produtos({ produtos }) {
 Produtos.auth = true;
 
 export async function getServerSideProps(context) {
-  const session = await unstable_getServerSession(context.req, context.res, authOptions)  
-  const { user } = session
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+  const { user } = session;
   await db.connect();
-  const produtos = await Produto.find({user: user.email})
+  const produtos = await Produto.find({ user: user.email })
     .sort({ createdAt: -1 })
     .lean();
   return {
     props: {
-      produtos: produtos.map(db.convertDocToObj), 
+      produtos: produtos.map(db.convertDocToObj),
     },
   };
 }

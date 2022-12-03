@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 
-import { authOptions } from 'pages/api/auth/[...nextauth]'
-import { unstable_getServerSession } from "next-auth/next"
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { unstable_getServerSession } from "next-auth/next";
 
 import db from "../utils/db";
 import Venda from "../Models/Venda";
@@ -34,7 +34,6 @@ export default function Vendas({ vendas }) {
     setProdutoFiltrado(buscando);
   }, [busca, vendas, abrirExcluir]);
 
-
   function Editar(id) {
     setIdProduto(id);
     setAbrirEditar(true);
@@ -47,6 +46,11 @@ export default function Vendas({ vendas }) {
 
   return (
     <div>
+      <Head>
+        <title>Vendas</title>
+        <meta name='description' content='My app' />
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
       <Nav />
       <Header
         title='Vendas'
@@ -59,7 +63,7 @@ export default function Vendas({ vendas }) {
         {vendas.length !== 0 ? (
           <table className='w-full '>
             <thead className='bg-slate-100'>
-              <tr className="border-b-2 border-slate-200">
+              <tr className='border-b-2 border-slate-200'>
                 <th className='p-5 w-1/6  text-center'>Produto</th>
                 <th className='p-5 w-1/6  text-center'>Valor de Custo</th>
                 <th className='p-5 w-1/6  text-center'>Valor de Venda</th>
@@ -68,18 +72,27 @@ export default function Vendas({ vendas }) {
                 <th className='p-5 w-1/6  text-center'>#</th>
               </tr>
             </thead>
-            <tbody >
+            <tbody>
               {produtoFiltrado
                 ? produtoFiltrado.map((produto) => (
-                    <tr className="border-b-2 border-slate-200" key={produto._id}>
+                    <tr
+                      className='border-b-2 border-slate-200'
+                      key={produto._id}
+                    >
                       <td className='p-5 w-1/6  text-center'>
                         {produto.produto}
                       </td>
                       <td className='p-5 w-1/6  text-center'>
-                        R$ {produto.valorCusto}
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(produto.valorCusto)}
                       </td>
                       <td className='p-5 w-1/6  text-center'>
-                        R$ {produto.valorVenda}
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(produto.valorVenda)}
                       </td>
                       <td className='p-5 w-1/6  text-center'>
                         R$ {produto.criadoEm}
@@ -109,10 +122,16 @@ export default function Vendas({ vendas }) {
                         {produto.produto}
                       </td>
                       <td className='p-5 w-1/6  text-center'>
-                        R$ {produto.valorCusto}
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(produto.valorCusto)}
                       </td>
                       <td className='p-5 w-1/6  text-center'>
-                        R$ {produto.valorVenda}
+                        {new Intl.NumberFormat("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                        }).format(produto.valorVenda)}
                       </td>
                       <td className='p-5 w-1/6  text-center'>
                         {produto.criadoEm}
@@ -139,9 +158,7 @@ export default function Vendas({ vendas }) {
             </tbody>
           </table>
         ) : (
-          <h1 className='font-bold p-5 text-xl'>
-            Não há vendas realizadas!
-          </h1>
+          <h1 className='font-bold p-5 text-xl'>Não há vendas realizadas!</h1>
         )}
       </div>
       {abrirExcluir && (
@@ -166,19 +183,22 @@ export default function Vendas({ vendas }) {
   );
 }
 
-Vendas.auth = true
+Vendas.auth = true;
 
 export async function getServerSideProps(context) {
-  const session = await unstable_getServerSession(context.req, context.res, authOptions)  
-  const { user } = session
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+  const { user } = session;
   await db.connect();
-  const vendas = await Venda.find({user: user.email}).sort({ updatedAt: -1 }).lean();
+  const vendas = await Venda.find({ user: user.email })
+    .sort({ updatedAt: -1 })
+    .lean();
   return {
     props: {
-      vendas: vendas.map(db.convertDocToObj) ,
+      vendas: vendas.map(db.convertDocToObj),
     },
   };
 }
-
-
-

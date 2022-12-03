@@ -8,7 +8,7 @@ export default function Nav() {
     <div className='fixed top-0 overflow-auto z-30 w-48 h-screen bg-slate-500 max-[600px]:w-full max-[600px]:h-36 '>
       <ul className='w-full max-[600px]:flex max-[600px]:justify-between max-[600px]:flex-col'>
         <div>
-          <Link href='/'>
+          <Link href='/inicio'>
             {" "}
             <li className='p-6 text-slate-800 font-bold text-2xl max-[600px]:text-xl'>
               
@@ -18,9 +18,9 @@ export default function Nav() {
         </div>
         <hr />
         <div className='max-[600px]:flex'>
-          <Link href='/'>
+          <Link href='/inicio'>
             {" "}
-            <li className={pathName == '/' ? `active` : 'link'}>Inicio</li>
+            <li className={pathName == '/inicio' ? `active` : 'link'}>Inicio</li>
           </Link>
           <Link href='/produtos'>
             {" "}
@@ -31,7 +31,7 @@ export default function Nav() {
             <li className={pathName == '/vendas' ? `active` : 'link'}>Vendas</li>
           </Link>
           <li className='link' onClick={() => signOut({
-      callbackUrl: `${window.location.origin}/login`
+      callbackUrl: `${window.location.origin}/`
     })}>Sair</li>
         </div>
       </ul>
