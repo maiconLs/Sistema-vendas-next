@@ -7,7 +7,7 @@ const handler = async (req, res) => {
   const session = await getSession({ req })
   const {user} = session
   await db.connect()
-  const produto = await Produto.find({user: user.email})
+  const produto = await Produto.find({usuario: user.email})
 
   if(!produto) {
     res.status(404).json({message: 'Produto não encontrado!'})
