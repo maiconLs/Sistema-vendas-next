@@ -47,7 +47,7 @@ export default function NovoProduto({click}) {
           >
             <AiOutlineClose size={40} />
           </button>
-      <div className='w-5/12  bg-white rounded '>
+      <div className='w-5/12  bg-white rounded max-[600px]:w-full max-[600px]:m-5'>
         <form
           onSubmit={handleSubmit}
           className='flex flex-col justify-center items-center m-7'

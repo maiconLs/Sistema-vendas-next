@@ -30,6 +30,7 @@ export default function NovaVenda({ click }) {
         .get("/api/produtos/buscarProdutos")
         .then((res) => {
           setProdutos(res.data.produto);
+          console.log(produtos)
         })
         .catch((error) => toast.error(error));
     };
@@ -67,7 +68,7 @@ export default function NovaVenda({ click }) {
       <button onClick={() => click()} className='fixed z-50 top-10 right-10'>
         <AiOutlineClose size={40} />
       </button>
-      <div className='w-5/12  bg-white rounded '>
+      <div className='w-5/12  bg-white rounded max-[600px]:w-full max-[600px]:m-5'>
         <form
           onSubmit={handleSubmit}
           className='flex flex-col justify-center items-center m-7'

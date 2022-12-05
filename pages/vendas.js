@@ -11,7 +11,6 @@ import Venda from "../Models/Venda";
 import Nav from "../components/nav";
 import Header from "../components/header";
 import NovaVenda from "../components/novaVenda";
-import EditarVenda from "../components/editarVenda";
 import ExcluirItem from "../components/excluirItem";
 
 import { RiDeleteBin2Line } from "react-icons/ri";
@@ -101,12 +100,7 @@ export default function Vendas({ vendas }) {
                         {produto.quantidade}
                       </td>
                       <td className='p-5 w-1/6  text-center'>
-                        <button
-                          className='mr-5'
-                          onClick={() => Editar(produto._id)}
-                        >
-                          <BiEditAlt className='fill-slate-800' size={25} />
-                        </button>
+          
                         <button onClick={() => ModalExcluir(produto._id)}>
                           <RiDeleteBin2Line
                             className='fill-red-900'
@@ -140,12 +134,7 @@ export default function Vendas({ vendas }) {
                         {produto.quantidade}
                       </td>
                       <td className='p-5 w-1/6  text-center'>
-                        <button
-                          className='mr-5'
-                          onClick={() => Editar(produto._id)}
-                        >
-                          <BiEditAlt className='fill-slate-800' size={25} />
-                        </button>
+               
                         <button onClick={() => ModalExcluir(produto._id)}>
                           <RiDeleteBin2Line
                             className='fill-red-900'
@@ -174,11 +163,6 @@ export default function Vendas({ vendas }) {
         </>
       )}
 
-      {abrirEditar && (
-        <>
-          <EditarVenda id={idProduto} click={() => setAbrirEditar(false)} />{" "}
-        </>
-      )}
     </div>
   );
 }

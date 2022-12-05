@@ -5,7 +5,7 @@ import {  signOut } from "next-auth/react";
 export default function Nav() {
   const pathName = window.location.pathname
   return (
-    <div className='fixed top-0 overflow-auto z-30 w-48 h-screen bg-slate-500 max-[600px]:w-full max-[600px]:h-36 '>
+    <div className='fixed top-0  z-30 w-48 h-screen bg-slate-500 max-[600px]:w-full max-[600px]:h-36 '>
       <ul className='w-full max-[600px]:flex max-[600px]:justify-between max-[600px]:flex-col'>
         <div>
           <Link href='/inicio'>
@@ -18,7 +18,7 @@ export default function Nav() {
         </div>
         <hr />
         <div className='max-[600px]:flex'>
-          <Link href='/inicio'>
+          <Link  href='/inicio'>
             {" "}
             <li className={pathName == '/inicio' ? `active` : 'link'}>Inicio</li>
           </Link>

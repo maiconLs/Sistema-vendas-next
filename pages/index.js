@@ -39,15 +39,15 @@ export default function Login() {
   }, [session]);
 
   return (
-    <div className='relative flex flex-col justify-center min-h-screen overflow-hidden '>
+    <div className='relative flex flex-col justify-center min-h-screen overflow-hidden max-[600px]:p-5 '>
       <Head>
         <title>Login</title>
         <meta name='description' content='My app' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <div className='w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl'>
+      <div className='w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl '>
         <h1 className='text-3xl font-semibold text-center text-slate-700 underline'>
-          Login
+          Sistema de vendas
         </h1>
 
         <div className='mt-6'>

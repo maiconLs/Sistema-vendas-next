@@ -12,8 +12,10 @@ body{
     font-family: Arial, Helvetica, sans-serif;
 }
 
+
+
 .link{
-    @apply p-6 text-white font-bold text-xl cursor-pointer
+    @apply p-6 text-white font-bold text-xl  cursor-pointer max-[600px]:p-5
 }
 
 .link:hover{
@@ -21,5 +23,5 @@ body{
 }
 
 .active{
-    @apply p-6 text-white font-bold text-xl bg-slate-600
+    @apply p-6 text-white font-bold text-xl bg-slate-600 cursor-pointer max-[600px]:p-5
 }
