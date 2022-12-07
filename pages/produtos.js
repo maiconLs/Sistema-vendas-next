@@ -61,7 +61,7 @@ export default function Produtos({ produtos }) {
         busca={setBusca}
       />
 
-      <div className='pl-48 mt-5 max-[600px]:pl-0 '>
+      <div fallback={<div className="loader"></div>} className='pl-48 mt-5 max-[600px]:pl-0 '>
         {produtos.length !== 0 ? (
           largura > 600 ? (
             <table className='w-full '>

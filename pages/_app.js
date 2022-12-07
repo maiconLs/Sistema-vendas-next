@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/router";
+import NextNProgress from 'nextjs-progressbar';
 
 export default function App({
   Component,
@@ -14,9 +15,11 @@ export default function App({
       <ToastContainer autoClose={3000} />
       {Component.auth ? (
         <Auth>
+          <NextNProgress />,
           <Component {...pageProps} />
         </Auth>
       ) : (
+        <NextNProgress />,
         <Component {...pageProps} />
       )}
     </SessionProvider>

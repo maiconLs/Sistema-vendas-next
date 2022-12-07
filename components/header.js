@@ -2,8 +2,8 @@ import React, { useState } from "react";
 
 export default function Header({ title, abrir, nomeBotao, busca }) {
   return (
-    <div>
-      <div className='bg-slate-200 w-full h-20 pl-56 p-7 flex flex-row justify-between items-center max-[600px]:pl-0 max-[600px]:mt-36'>
+    <div >
+      <div className='-mt-6 bg-slate-200 w-full h-20 pl-56 p-7 flex flex-row justify-between items-center  max-[600px]:pl-0 max-[600px]:mt-32'>
         <div className='w-28 max-[600px]:hidden'>
           <h1 className='text-2xl font-bold text-slate-800'>{title}</h1>
         </div>

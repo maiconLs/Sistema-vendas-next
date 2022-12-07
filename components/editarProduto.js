@@ -37,10 +37,12 @@ export default function EditarProduto({ id, click }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
 
     await axios
       .put("/api/produtos/editarProduto", novoProduto)
       .then((response) => {
+        setLoading(false);
         router.push("/produtos");
         click();
         toast.success("Produto editado com sucesso!");
@@ -106,7 +108,7 @@ export default function EditarProduto({ id, click }) {
               className='w-72 bg-lime-400 rounded h-10 text-white font-bold m-2'
               type='submit'
             >
-              Editar
+              {loading ? <div className="loader"></div> : 'Editar'}
             </button>
           </form>
         </div>

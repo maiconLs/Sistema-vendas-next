@@ -8,6 +8,8 @@ import { useSession } from "next-auth/react";
 
 export default function NovoProduto({click}) {
   const [novoProduto, setNovoProduto] = useState();
+  const [loading, setLoading] = useState(false);
+
   const { data: session } = useSession();
 
   const router = useRouter();
@@ -29,11 +31,13 @@ export default function NovoProduto({click}) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
 
     await axios
       .post("/api/produtos/criarProduto/", novoProduto)
       .then((response) => {
         router.push('/produtos')
+        setLoading(false);
         click()
         toast.success("Produto criado com sucesso!");
       })
@@ -93,7 +97,7 @@ export default function NovoProduto({click}) {
             className='w-72 bg-lime-400 rounded h-10 text-white font-bold m-2'
             type='submit'
           >
-            Cadastrar
+            {loading ? <div className="loader"></div> : 'Cadastrar'}
           </button>
         </form>
       </div>
