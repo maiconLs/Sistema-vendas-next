@@ -2,8 +2,8 @@ import "../styles/globals.css";
 import { ToastContainer } from "react-toastify";
 import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
-import { useSession, signIn, signOut } from "next-auth/react"
-import { useRouter } from 'next/router'
+import { useSession, signIn, signOut } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function App({
   Component,
@@ -26,7 +26,7 @@ export default function App({
 function Auth({ children }) {
   const { data: session, status } = useSession();
   const isUser = !!session?.user;
- useEffect(() => {
+  useEffect(() => {
     if (status === "loading") return;
     if (!isUser) signIn();
   }, [isUser, status]);
@@ -35,5 +35,9 @@ function Auth({ children }) {
     return children;
   }
 
-  return <div>Loading...</div>;
+  return (
+    <div className='flex flex-row justify-center items-center min-h-screen w-full'>
+      <div className='loader'></div>
+    </div>
+  );
 }

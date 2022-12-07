@@ -54,7 +54,7 @@ export default function EditarProduto({ id, click }) {
         <AiOutlineClose size={40} />
       </button>
       {loading ? (
-        <div>Carregando...</div>
+        <div className="loader"></div>
       ) : (
         <div className='w-5/12  bg-white rounded max-[600px]:w-full max-[600px]:m-5'>
           <form

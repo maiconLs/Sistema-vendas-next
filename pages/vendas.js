@@ -12,9 +12,7 @@ import Nav from "../components/nav";
 import Header from "../components/header";
 import NovaVenda from "../components/novaVenda";
 import ExcluirItem from "../components/excluirItem";
-
-import { RiDeleteBin2Line } from "react-icons/ri";
-import { BiEditAlt } from "react-icons/bi";
+import TabelaVendas from "../components/tabelaVendas";
 
 export default function Vendas({ vendas }) {
   const [abrirModal, setAbrirModal] = useState(false);
@@ -23,10 +21,12 @@ export default function Vendas({ vendas }) {
   const [idProduto, setIdProduto] = useState("");
   const [busca, setBusca] = useState("");
   const [produtoFiltrado, setProdutoFiltrado] = useState();
+  const [largura, setLargura] = useState();
 
   const router = useRouter();
 
   useEffect(() => {
+    setLargura(window.screen.width);
     const buscando = vendas?.filter((produto) =>
       produto.produto.toLowerCase().includes(busca.toLowerCase())
     );
@@ -60,92 +60,102 @@ export default function Vendas({ vendas }) {
 
       <div className='pl-48 mt-5 max-[600px]:pl-0'>
         {vendas.length !== 0 ? (
-          <table className='w-full '>
-            <thead className='bg-slate-100'>
-              <tr className='border-b-2 border-slate-200'>
-                <th className='p-5 w-1/6  text-center'>Produto</th>
-                <th className='p-5 w-1/6  text-center'>Valor de Custo</th>
-                <th className='p-5 w-1/6  text-center'>Valor de Venda</th>
-                <th className='p-5 w-1/6  text-center'>Última venda</th>
-                <th className='p-5 w-1/6  text-center'>Quantidade de vendas</th>
-                <th className='p-5 w-1/6  text-center'>#</th>
-              </tr>
-            </thead>
-            <tbody>
+          largura > 600 ? (
+            <table className='w-full '>
+              <thead className='bg-slate-100'>
+                <tr className='border-b-2 border-slate-200'>
+                  <th className='p-5 w-1/6  text-center'>Produto</th>
+                  <th className='p-5 w-1/6  text-center'>Valor de Custo</th>
+                  <th className='p-5 w-1/6  text-center'>Valor de Venda</th>
+                  <th className='p-5 w-1/6  text-center'>Última venda</th>
+                  <th className='p-5 w-1/6  text-center'>
+                    Quantidade de vendas
+                  </th>
+                  <th className='p-5 w-1/6  text-center'>Excluir</th>
+                </tr>
+              </thead>
+              <tbody>
+                {produtoFiltrado
+                  ? produtoFiltrado.map((produto) => (
+                      <TabelaVendas
+                        key={produto._id}
+                        produto={produto}
+                        excluir={() => ModalExcluir(produto._id)}
+                        classetd='p-5 w-1/6  text-center'
+                        classetr='border-b-2 border-slate-200'
+                      />
+                    ))
+                  : vendas.map((produto) => (
+                      <TabelaVendas
+                        key={produto._id}
+                        produto={produto}
+                        excluir={() => ModalExcluir(produto._id)}
+                        classetd='p-5 w-1/6  text-center'
+                        classetr='border-b-2 border-slate-200'
+                      />
+                    ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className='w-full  '>
               {produtoFiltrado
                 ? produtoFiltrado.map((produto) => (
-                    <tr
-                      className='border-b-2 border-slate-200'
-                      key={produto._id}
-                    >
-                      <td className='p-5 w-1/6  text-center'>
-                        {produto.produto}
-                      </td>
-                      <td className='p-5 w-1/6  text-center'>
-                        {new Intl.NumberFormat("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        }).format(produto.valorCusto)}
-                      </td>
-                      <td className='p-5 w-1/6  text-center'>
-                        {new Intl.NumberFormat("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        }).format(produto.valorVenda)}
-                      </td>
-                      <td className='p-5 w-1/6  text-center'>
-                        R$ {produto.criadoEm}
-                      </td>
-                      <td className='p-5 w-1/6  text-center'>
-                        {produto.quantidade}
-                      </td>
-                      <td className='p-5 w-1/6  text-center'>
-          
-                        <button onClick={() => ModalExcluir(produto._id)}>
-                          <RiDeleteBin2Line
-                            className='fill-red-900'
-                            size={25}
-                          />
-                        </button>
-                      </td>
-                    </tr>
+                    <table className='flex flex row mb-5'>
+                      <thead className='bg-slate-100 '>
+                        <tr className=' border-slate-200 flex flex-col  '>
+                          <th className='p-5  text-start'>Produto</th>
+                          <th className='p-5  text-start'>Valor de Custo</th>
+                          <th className='p-5  text-start'>Valor de Venda</th>
+                          <th className='p-5  text-start'>
+                            Última venda
+                          </th>
+                          <th className='p-5  text-start'>
+                            Quantidade de vendas
+                          </th>
+                          <th className='p-5  text-start'>Excluir</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <TabelaVendas
+                          key={produto._id}
+                          produto={produto}
+                          excluir={() => ModalExcluir(produto._id)}
+                          editar={() => Editar(produto._id)}
+                          classetd='p-5 text-start'
+                          classetr=' border-slate-200 flex flex-col mb-5'
+                        />
+                      </tbody>
+                    </table>
                   ))
                 : vendas.map((produto) => (
-                    <tr key={produto._id}>
-                      <td className='p-5 w-1/6  text-center'>
-                        {produto.produto}
-                      </td>
-                      <td className='p-5 w-1/6  text-center'>
-                        {new Intl.NumberFormat("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        }).format(produto.valorCusto)}
-                      </td>
-                      <td className='p-5 w-1/6  text-center'>
-                        {new Intl.NumberFormat("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        }).format(produto.valorVenda)}
-                      </td>
-                      <td className='p-5 w-1/6  text-center'>
-                        {produto.criadoEm}
-                      </td>
-                      <td className='p-5 w-1/6  text-center'>
-                        {produto.quantidade}
-                      </td>
-                      <td className='p-5 w-1/6  text-center'>
-               
-                        <button onClick={() => ModalExcluir(produto._id)}>
-                          <RiDeleteBin2Line
-                            className='fill-red-900'
-                            size={25}
-                          />
-                        </button>
-                      </td>
-                    </tr>
+                    <table className='flex flex-row'>
+                      <thead className='bg-slate-100'>
+                        <tr className=' border-slate-200'>
+                          <th className='p-5  text-start'>Produto</th>
+                          <th className='p-5  text-start'>Valor de Custo</th>
+                          <th className='p-5  text-start'>Valor de Venda</th>
+                          <th className='p-5 text-start'>
+                            Última venda
+                          </th>
+                          <th className='p-5 text-start'>
+                            Quantidade de vendas
+                          </th>
+                          <th className='p-5  text-start'>Excluir</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <TabelaVendas
+                          key={produto._id}
+                          produto={produto}
+                          excluir={() => ModalExcluir(produto._id)}
+                          classetd='p-5 text-start'
+                          classetr='border-b-2 border-slate-200 flex flex-col mb-5'
+                        />
+                      </tbody>
+                    </table>
                   ))}
-            </tbody>
-          </table>
+            </div>
+          )
         ) : (
           <h1 className='font-bold p-5 text-xl'>Não há vendas realizadas!</h1>
         )}
@@ -162,7 +172,6 @@ export default function Vendas({ vendas }) {
           <NovaVenda click={() => setAbrirModal(false)} />
         </>
       )}
-
     </div>
   );
 }

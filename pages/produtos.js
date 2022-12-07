@@ -12,6 +12,7 @@ import Produto from "../Models/Produto";
 import NovoProduto from "../components/novoProduto";
 import EditarProduto from "../components/editarProduto";
 import ExcluirItem from "../components/excluirItem";
+import TabelaProdutos from "../components/tabelaProdutos";
 
 import { RiDeleteBin2Line } from "react-icons/ri";
 import { BiEditAlt } from "react-icons/bi";
@@ -29,7 +30,6 @@ export default function Produtos({ produtos }) {
 
   useEffect(() => {
     setLargura(window.screen.width);
-    console.log(largura);
     const buscando = produtos.filter((produto) =>
       produto.produto.toLowerCase().includes(busca.toLowerCase())
     );
@@ -71,85 +71,30 @@ export default function Produtos({ produtos }) {
                   <th className='p-5 w-1/5  text-center'>Valor de Custo</th>
                   <th className='p-5 w-1/5  text-center'>Valor de Venda</th>
                   <th className='p-5 w-1/5  text-center'>Criado em</th>
-                  <th className='p-5 w-1/5  text-center'>#</th>
+                  <th className='p-5 w-1/5  text-center'>Editar/Excluir</th>
                 </tr>
               </thead>
               <tbody>
                 {produtoFiltrado
                   ? produtoFiltrado.map((produto) => (
-                      <tr
-                        className='border-b-2 border-slate-200'
+                      <TabelaProdutos
                         key={produto._id}
-                      >
-                        <td className='p-5 w-1/5  text-center'>
-                          {produto.produto}
-                        </td>
-                        <td className='p-5 w-1/5  text-center'>
-                          {new Intl.NumberFormat("pt-BR", {
-                            style: "currency",
-                            currency: "BRL",
-                          }).format(produto.valorCusto)}
-                        </td>
-                        <td className='p-5 w-1/5  text-center'>
-                          {new Intl.NumberFormat("pt-BR", {
-                            style: "currency",
-                            currency: "BRL",
-                          }).format(produto.valorVenda)}
-                        </td>
-                        <td className='p-5 w-1/5  text-center'>
-                          {produto.criadoEm}
-                        </td>
-                        <td className='p-5 w-1/5  text-center'>
-                          <button
-                            className='mr-5'
-                            onClick={() => Editar(produto._id)}
-                          >
-                            <BiEditAlt className='fill-slate-800' size={25} />
-                          </button>
-                          <button onClick={() => ModalExcluir(produto._id)}>
-                            <RiDeleteBin2Line
-                              className='fill-red-900'
-                              size={25}
-                            />
-                          </button>
-                        </td>
-                      </tr>
+                        produto={produto}
+                        excluir={() => ModalExcluir(produto._id)}
+                        editar={() => Editar(produto._id)}
+                        classetd='p-5 w-1/5  text-center'
+                        classetr='border-b-2 border-slate-200'
+                      />
                     ))
                   : produtos.map((produto) => (
-                      <tr key={produto._id}>
-                        <td className='p-5 w-1/5  text-center'>
-                          {produto.produto}
-                        </td>
-                        <td className='p-5 w-1/5  text-center'>
-                          {new Intl.NumberFormat("pt-BR", {
-                            style: "currency",
-                            currency: "BRL",
-                          }).format(produto.valorCusto)}
-                        </td>
-                        <td className='p-5 w-1/5  text-center'>
-                          {new Intl.NumberFormat("pt-BR", {
-                            style: "currency",
-                            currency: "BRL",
-                          }).format(produto.valorVenda)}
-                        </td>
-                        <td className='p-5 w-1/5  text-center'>
-                          {produto.criadoEm}
-                        </td>
-                        <td className='p-5 w-1/5  text-center'>
-                          <button
-                            className='mr-5'
-                            onClick={() => Editar(produto._id)}
-                          >
-                            <BiEditAlt className='fill-slate-800' size={25} />
-                          </button>
-                          <button onClick={() => ModalExcluir(produto._id)}>
-                            <RiDeleteBin2Line
-                              className='fill-red-900'
-                              size={25}
-                            />
-                          </button>
-                        </td>
-                      </tr>
+                      <TabelaProdutos
+                        key={produto._id}
+                        produto={produto}
+                        excluir={() => ModalExcluir(produto._id)}
+                        editar={() => Editar(produto._id)}
+                        classetd='p-5 w-1/5  text-center'
+                        classetr='border-b-2 border-slate-200'
+                      />
                     ))}
               </tbody>
             </table>
@@ -164,45 +109,18 @@ export default function Produtos({ produtos }) {
                           <th className='p-5  text-start'>Valor de Custo</th>
                           <th className='p-5  text-start'>Valor de Venda</th>
                           <th className='p-5  text-start'>Criado em</th>
-                          <th className='p-5  text-start'>#</th>
+                          <th className='p-5  text-start'>Editar/excluir</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr
-                          className=' border-slate-200 flex flex-col'
-                          key={produto._id}
-                        >
-                          <td className='p-5  text-start'>{produto.produto}</td>
-                          <td className='p-5  text-start'>
-                            {new Intl.NumberFormat("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                            }).format(produto.valorCusto)}
-                          </td>
-                          <td className='p-5  text-start'>
-                            {new Intl.NumberFormat("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                            }).format(produto.valorVenda)}
-                          </td>
-                          <td className='p-5  text-start'>
-                            {produto.criadoEm}
-                          </td>
-                          <td className='p-5  text-start'>
-                            <button
-                              className='mr-5'
-                              onClick={() => Editar(produto._id)}
-                            >
-                              <BiEditAlt className='fill-slate-800' size={25} />
-                            </button>
-                            <button onClick={() => ModalExcluir(produto._id)}>
-                              <RiDeleteBin2Line
-                                className='fill-red-900'
-                                size={25}
-                              />
-                            </button>
-                          </td>
-                        </tr>
+                      <TabelaProdutos
+                        key={produto._id}
+                        produto={produto}
+                        excluir={() => ModalExcluir(produto._id)}
+                        editar={() => Editar(produto._id)}
+                        classetd='p-5 text-start'
+                        classetr=' border-slate-200 flex flex-col mb-5'
+                      />
                       </tbody>
                     </table>
                   ))
@@ -214,42 +132,19 @@ export default function Produtos({ produtos }) {
                           <th className='p-5  text-start'>Valor de Custo</th>
                           <th className='p-5  text-start'>Valor de Venda</th>
                           <th className='p-5  text-start'>Criado em</th>
-                          <th className='p-5  text-start'>#</th>
+                          <th className='p-5  text-start'>Editar/excluir</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr key={produto._id}>
-                          <td className='p-5  text-start'>{produto.produto}</td>
-                          <td className='p-5  text-start'>
-                            {new Intl.NumberFormat("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                            }).format(produto.valorCusto)}
-                          </td>
-                          <td className='p-5  text-start'>
-                            {new Intl.NumberFormat("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                            }).format(produto.valorVenda)}
-                          </td>
-                          <td className='p-5  text-start'>
-                            {produto.criadoEm}
-                          </td>
-                          <td className='p-5  text-start'>
-                            <button
-                              className='mr-5'
-                              onClick={() => Editar(produto._id)}
-                            >
-                              <BiEditAlt className='fill-slate-800' size={25} />
-                            </button>
-                            <button onClick={() => ModalExcluir(produto._id)}>
-                              <RiDeleteBin2Line
-                                className='fill-red-900'
-                                size={25}
-                              />
-                            </button>
-                          </td>
-                        </tr>
+                      <TabelaProdutos
+                        key={produto._id}
+                        produto={produto}
+                        excluir={() => ModalExcluir(produto._id)}
+                        editar={() => Editar(produto._id)}
+                        classetd='p-5 text-start'
+                        classetr='border-b-2 border-slate-200 flex flex-col mb-5'
+
+                      />
                       </tbody>
                     </table>
                   ))}
